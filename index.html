@@ -414,6 +414,41 @@
     perspective: 1200px;
   }
 
+  /* The paper hangs from a single tack at top-center.
+     Motion is two layered sine-like sways at different periods: outer is big
+     and slow, inner is small and faster. Their sum never exactly repeats, so
+     it reads as a natural draft instead of a metronome. `alternate` with
+     ease-in-out produces sinusoidal acceleration with no keyframe stutter. */
+
+  .letter__wrap {
+    position: relative;
+  }
+  .letter__card {
+    opacity: 0;
+    transform-origin: 50% 0;
+    transition: opacity .9s ease;
+    will-change: transform, opacity;
+  }
+  .letter__wrap.is-in .letter__card {
+    opacity: 1;
+    animation: letterSwayOuter 6.5s ease-in-out infinite alternate;
+  }
+  .letter__card-inner {
+    transform-origin: 50% 0;
+    will-change: transform;
+  }
+  .letter__wrap.is-in .letter__card-inner {
+    animation: letterSwayInner 4.3s ease-in-out infinite alternate;
+  }
+  @keyframes letterSwayOuter {
+    from { transform: rotate(-1.3deg); }
+    to   { transform: rotate(0.75deg); }
+  }
+  @keyframes letterSwayInner {
+    from { transform: rotate(-0.28deg); }
+    to   { transform: rotate(0.22deg); }
+  }
+
   .letter__card {
     position: relative;
     padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 5vw, 3.25rem);
@@ -425,33 +460,9 @@
     filter:
       drop-shadow(0 22px 30px rgba(0,0,0,0.55))
       drop-shadow(0 2px 0 rgba(0,0,0,0.25));
-    opacity: 0;
-    transform: rotate(0deg);
-    transform-origin: 50% 6px;           /* pivot at the tack */
-    transition: opacity .9s ease;
-    will-change: transform, opacity;
-  }
-  .letter__card.is-in {
-    opacity: 1;
-    animation: letterSway 11s ease-in-out infinite;
   }
 
-  /* A breathy, irregular sway — like a faint draft. Two layered rhythms keep
-     it from looking like a metronome. */
-  @keyframes letterSway {
-    0%   { transform: rotate(-1.1deg); }
-    11%  { transform: rotate(-0.6deg); }
-    23%  { transform: rotate(0.35deg); }
-    34%  { transform: rotate(0.9deg); }
-    45%  { transform: rotate(0.55deg); }
-    57%  { transform: rotate(-0.25deg); }
-    68%  { transform: rotate(-0.85deg); }
-    79%  { transform: rotate(-1.15deg); }
-    88%  { transform: rotate(-0.75deg); }
-    100% { transform: rotate(-1.1deg); }
-  }
-
-  /* The tack — small brass-ish head with a highlight, sitting above the card */
+  /* Tack sits on the wall, not on the paper — stays put while paper sways */
   .letter__tack {
     position: absolute;
     top: -7px; left: 50%;
@@ -461,9 +472,9 @@
     background:
       radial-gradient(circle at 32% 28%, #F6E2B3 0%, #D4AA4E 42%, #8B5B24 78%, #4A2A10 100%);
     box-shadow:
-      0 1px 0 rgba(255,230,180,0.35),          /* top rim highlight */
-      0 4px 6px rgba(0,0,0,0.6),                /* drop shadow onto paper */
-      inset -1px -2px 2px rgba(0,0,0,0.35);    /* underside shade */
+      0 1px 0 rgba(255,230,180,0.35),
+      0 4px 6px rgba(0,0,0,0.6),
+      inset -1px -2px 2px rgba(0,0,0,0.35);
     z-index: 3;
     pointer-events: none;
   }
@@ -504,8 +515,8 @@
   .letter__sign b { color: var(--bone); font-style: normal; }
 
   @media (prefers-reduced-motion: reduce) {
-    .letter__card { transition: none; transform: rotate(-0.5deg); opacity: 1; }
-    .letter__card.is-in { animation: none; transform: rotate(-0.5deg); }
+    .letter__card, .letter__card-inner { animation: none !important; transform: rotate(-0.4deg); }
+    .letter__card { opacity: 1; transition: none; }
   }
 
   /* ————————————————————————————— THE DOOR */
@@ -964,27 +975,31 @@ function Letter() {
 
   return (
     <section id="letter" className="letter" ref={ref}>
-      <div className={`letter__card ${inView ? 'is-in' : ''}`}>
+      <div className={`letter__wrap ${inView ? 'is-in' : ''}`}>
         <span className="letter__tack" aria-hidden="true" />
-        <div className="letter__mark">A note —</div>
-        <p>
-          Until this spring, if you wanted a real tequila bar, you drove to Austin.
-          <em> Not anymore.</em> Citrus &amp; Salt is the only one in Bryan —
-          built slowly, on purpose, for the people in this town who already know
-          what good agave tastes like.
-        </p>
-        <p>
-          A third of Bryan is Mexican or Mexican-American. Four generations of
-          families who carried recipes, bottles, and better judgment about tequila
-          than most bars in Austin have. <span className="pink">We built this for you first.</span>
-        </p>
-        <p>
-          Behind the bar is <b>Dustin Batson</b> — the same hands most of Main
-          Street already knows. Ask what&rsquo;s rotating. Ask for something neat.
-          Ask him to pick.
-        </p>
-        <div className="letter__sign">
-          — The owners · <b>Downtown Bryan</b> · April 2026
+        <div className="letter__card">
+          <div className="letter__card-inner">
+            <div className="letter__mark">A note —</div>
+            <p>
+              Until this spring, if you wanted a real tequila bar, you drove to Austin.
+              <em> Not anymore.</em> Citrus &amp; Salt is the only one in Bryan —
+              built slowly, on purpose, for the people in this town who already know
+              what good agave tastes like.
+            </p>
+            <p>
+              A third of Bryan is Mexican or Mexican-American. Four generations of
+              families who carried recipes, bottles, and better judgment about tequila
+              than most bars in Austin have. <span className="pink">We built this for you first.</span>
+            </p>
+            <p>
+              Behind the bar is <b>Dustin Batson</b> — the same hands most of Main
+              Street already knows. Ask what&rsquo;s rotating. Ask for something neat.
+              Ask him to pick.
+            </p>
+            <div className="letter__sign">
+              — The owners · <b>Downtown Bryan</b> · April 2026
+            </div>
+          </div>
         </div>
       </div>
     </section>
