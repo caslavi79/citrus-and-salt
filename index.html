@@ -948,9 +948,11 @@ function Letter() {
 
   useEffect(() => {
     if (!ref.current) return;
+    // Trigger ~80% of a viewport before the letter enters the viewport, so it
+    // starts swaying roughly midway through the drinks list above.
     const obs = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) { setInView(true); obs.disconnect(); }
-    }, { threshold: 0.12 });
+    }, { threshold: 0, rootMargin: '0px 0px 80% 0px' });
     obs.observe(ref.current);
     return () => obs.disconnect();
   }, []);
