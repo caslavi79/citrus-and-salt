@@ -414,11 +414,9 @@
     perspective: 1200px;
   }
 
-  /* The paper hangs from a single tack at top-center.
-     Motion is two layered sine-like sways at different periods: outer is big
-     and slow, inner is small and faster. Their sum never exactly repeats, so
-     it reads as a natural draft instead of a metronome. `alternate` with
-     ease-in-out produces sinusoidal acceleration with no keyframe stutter. */
+  /* The paper hangs from a single tack at top-center. Rotation is driven by
+     JS (rAF with layered sines) so motion is truly continuous — no keyframe
+     bunching at the extremes. See the Letter component. */
 
   .letter__wrap {
     position: relative;
@@ -431,22 +429,6 @@
   }
   .letter__wrap.is-in .letter__card {
     opacity: 1;
-    animation: letterSwayOuter 6.5s ease-in-out infinite alternate;
-  }
-  .letter__card-inner {
-    transform-origin: 50% 0;
-    will-change: transform;
-  }
-  .letter__wrap.is-in .letter__card-inner {
-    animation: letterSwayInner 4.3s ease-in-out infinite alternate;
-  }
-  @keyframes letterSwayOuter {
-    from { transform: rotate(-1.3deg); }
-    to   { transform: rotate(0.75deg); }
-  }
-  @keyframes letterSwayInner {
-    from { transform: rotate(-0.28deg); }
-    to   { transform: rotate(0.22deg); }
   }
 
   .letter__card {
@@ -515,8 +497,7 @@
   .letter__sign b { color: var(--bone); font-style: normal; }
 
   @media (prefers-reduced-motion: reduce) {
-    .letter__card, .letter__card-inner { animation: none !important; transform: rotate(-0.4deg); }
-    .letter__card { opacity: 1; transition: none; }
+    .letter__card { opacity: 1; transform: rotate(-0.4deg); transition: none; }
   }
 
   /* ————————————————————————————— THE DOOR */
@@ -962,6 +943,7 @@ function Carta() {
 
 function Letter() {
   const ref = useRef(null);
+  const cardRef = useRef(null);
   const [inView, setInView] = useState(false);
 
   useEffect(() => {
@@ -973,32 +955,54 @@ function Letter() {
     return () => obs.disconnect();
   }, []);
 
+  // Continuous rAF-driven sway — sum of three sines at incommensurate
+  // periods so the combined angular velocity never simultaneously hits zero.
+  // No keyframe bunching, no pauses at the extremes, just drift.
+  useEffect(() => {
+    if (!inView) return;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+    const card = cardRef.current;
+    if (!card) return;
+    const t0 = performance.now();
+    let raf;
+    const tick = (now) => {
+      const t = (now - t0) / 1000;
+      const r =
+        1.15 * Math.sin((2 * Math.PI * t) / 6.2) +
+        0.42 * Math.sin((2 * Math.PI * t) / 4.1 + 1.3) +
+        0.22 * Math.sin((2 * Math.PI * t) / 2.73 + 0.6);
+      card.style.transform = `rotate(${r.toFixed(3)}deg)`;
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView]);
+
   return (
     <section id="letter" className="letter" ref={ref}>
       <div className={`letter__wrap ${inView ? 'is-in' : ''}`}>
         <span className="letter__tack" aria-hidden="true" />
-        <div className="letter__card">
-          <div className="letter__card-inner">
-            <div className="letter__mark">A note —</div>
-            <p>
-              Until this spring, if you wanted a real tequila bar, you drove to Austin.
-              <em> Not anymore.</em> Citrus &amp; Salt is the only one in Bryan —
-              built slowly, on purpose, for the people in this town who already know
-              what good agave tastes like.
-            </p>
-            <p>
-              A third of Bryan is Mexican or Mexican-American. Four generations of
-              families who carried recipes, bottles, and better judgment about tequila
-              than most bars in Austin have. <span className="pink">We built this for you first.</span>
-            </p>
-            <p>
-              Behind the bar is <b>Dustin Batson</b> — the same hands most of Main
-              Street already knows. Ask what&rsquo;s rotating. Ask for something neat.
-              Ask him to pick.
-            </p>
-            <div className="letter__sign">
-              — The owners · <b>Downtown Bryan</b> · April 2026
-            </div>
+        <div className="letter__card" ref={cardRef}>
+          <div className="letter__mark">A note —</div>
+          <p>
+            Until this spring, if you wanted a real tequila bar, you drove to Austin.
+            <em> Not anymore.</em> Citrus &amp; Salt is the only one in Bryan —
+            built slowly, on purpose, for the people in this town who already know
+            what good agave tastes like.
+          </p>
+          <p>
+            A third of Bryan is Mexican or Mexican-American. Four generations of
+            families who carried recipes, bottles, and better judgment about tequila
+            than most bars in Austin have. <span className="pink">We built this for you first.</span>
+          </p>
+          <p>
+            Behind the bar is <b>Dustin Batson</b> — the same hands most of Main
+            Street already knows. Ask what&rsquo;s rotating. Ask for something neat.
+            Ask him to pick.
+          </p>
+          <div className="letter__sign">
+            — The owners · <b>Downtown Bryan</b> · April 2026
           </div>
         </div>
       </div>
