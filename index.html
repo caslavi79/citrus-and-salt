@@ -72,17 +72,16 @@
   .topbar::before {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(18,12,8,0.9), rgba(18,12,8,0.72));
+    background: linear-gradient(180deg, rgba(18,12,8,0.92), rgba(18,12,8,0.78));
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(212,170,78,0.18);
-    opacity: 0;
-    transition: opacity .28s ease-out;
+    opacity: 1;
+    transition: border-color .28s ease-out;
     pointer-events: none;
     z-index: -1;
-    will-change: opacity;
   }
-  .topbar.is-scrolled::before { opacity: 1; }
+  .topbar.is-scrolled::before { border-bottom-color: rgba(212,170,78,0.28); }
   .topbar a:hover { color: var(--bone); }
   .topbar .brand { font-family: var(--script); font-size: 22px; color: var(--bone); font-style: normal; }
   .topbar .brand .p { color: var(--pink); }
