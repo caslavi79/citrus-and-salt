@@ -392,13 +392,62 @@
   }
   @media (min-width: 760px) { .drink__price { font-size: 22px; } }
 
+  .carta__full {
+    display: inline-block;
+    margin-top: clamp(1.75rem, 5vw, 3rem);
+    font-family: var(--display); font-style: italic;
+    font-size: clamp(1rem, 2.1vw, 1.35rem);
+    color: var(--mustard);
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 3px;
+    transition: color .2s ease, letter-spacing .2s ease;
+  }
+  .carta__full:hover { color: var(--pink); letter-spacing: 0.02em; }
+  .carta__full span { display: inline-block; transition: transform .25s ease; }
+  .carta__full:hover span { transform: translateX(4px); }
+
   /* ————————————————————————————— THE LETTER */
   .letter {
     position: relative;
-    padding: 52px 20px 40px;
-    max-width: 900px; margin: 0 auto;
+    padding: clamp(3.5rem, 10vw, 7rem) clamp(1rem, 4vw, 4rem);
+    max-width: 980px; margin: 0 auto;
+    perspective: 1200px;
   }
-  @media (min-width: 760px) { .letter { padding: 100px 64px 80px; } }
+
+  .letter__card {
+    --tilt: 0deg;
+    position: relative;
+    padding: clamp(2.25rem, 6vw, 4rem) clamp(1.5rem, 5vw, 3.25rem);
+    background:
+      radial-gradient(700px 260px at 80% -10%, rgba(255,106,148,0.08), transparent 60%),
+      radial-gradient(600px 260px at 10% 110%, rgba(212,170,78,0.08), transparent 60%),
+      linear-gradient(180deg, rgba(38,26,16,0.85), rgba(26,18,9,0.9));
+    border: 1px solid rgba(212,170,78,0.22);
+    box-shadow:
+      0 40px 60px -40px rgba(0,0,0,0.8),
+      0 2px 0 rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(238,218,176,0.06);
+    opacity: 0;
+    transform: translateY(64px) rotate(-1.2deg);
+    transition: transform 1s cubic-bezier(.18,.7,.2,1), opacity .8s ease;
+    transform-origin: 50% 0%;
+    will-change: transform, opacity;
+  }
+  .letter__card.is-in {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--tilt, -0.4deg));
+  }
+
+  .letter__flourish {
+    position: absolute;
+    top: clamp(-14px, -2vw, -10px); left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 14px;
+    background: var(--night);
+    font-family: var(--script); color: var(--mustard);
+    font-size: 18px; letter-spacing: 0.4em;
+    line-height: 1;
+  }
 
   .letter__mark {
     font-family: var(--script); color: var(--mustard);
@@ -425,6 +474,11 @@
     line-height: 1.5;
   }
   .letter__sign b { color: var(--bone); font-style: normal; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .letter__card { transition: none; transform: none; opacity: 1; }
+    .letter__card.is-in { transform: none; }
+  }
 
   /* ————————————————————————————— THE DOOR */
   .door {
@@ -659,7 +713,7 @@
 <div id="root"></div>
 
 <script type="text/babel" data-presets="react">
-const { useState, useEffect } = React;
+const { useState, useEffect, useRef } = React;
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "palette": "mustard-clay",
@@ -859,32 +913,72 @@ function Carta() {
           <div className="drink__price">{d.price}</div>
         </div>
       ))}
+
+      <a href="menu.pdf" target="_blank" rel="noreferrer" className="carta__full">
+        See full menu <span aria-hidden="true">→</span>
+      </a>
     </section>
   );
 }
 
 function Letter() {
+  const ref = useRef(null);
+  const cardRef = useRef(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setInView(true); obs.disconnect(); }
+    }, { threshold: 0.12 });
+    obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
+  // Subtle scroll-linked tilt — card rocks 1–2° as it passes through viewport
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // progress: 0 when card top hits bottom of viewport, 1 when bottom hits top
+      const p = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
+      const tilt = (p - 0.5) * 2.2; // -1.1° … +1.1°
+      el.style.setProperty('--tilt', `${tilt.toFixed(2)}deg`);
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => { window.removeEventListener('scroll', onScroll); if (raf) cancelAnimationFrame(raf); };
+  }, []);
+
   return (
-    <section id="letter" className="letter">
-      <div className="letter__mark">A note —</div>
-      <p>
-        Until this spring, if you wanted a real tequila bar, you drove to Austin.
-        <em> Not anymore.</em> Citrus &amp; Salt is the only one in Bryan —
-        built slowly, on purpose, for the people in this town who already know
-        what good agave tastes like.
-      </p>
-      <p>
-        A third of Bryan is Mexican or Mexican-American. Four generations of
-        families who carried recipes, bottles, and better judgment about tequila
-        than most bars in Austin have. <span className="pink">We built this for you first.</span>
-      </p>
-      <p>
-        Behind the bar is <b>Dustin Batson</b> — the same hands most of Main
-        Street already knows. Ask what&rsquo;s rotating. Ask for something neat.
-        Ask him to pick.
-      </p>
-      <div className="letter__sign">
-        — The owners · <b>Downtown Bryan</b> · April 2026
+    <section id="letter" className="letter" ref={ref}>
+      <div className={`letter__card ${inView ? 'is-in' : ''}`} ref={cardRef}>
+        <span className="letter__flourish" aria-hidden="true">·  ·  ·</span>
+        <div className="letter__mark">A note —</div>
+        <p>
+          Until this spring, if you wanted a real tequila bar, you drove to Austin.
+          <em> Not anymore.</em> Citrus &amp; Salt is the only one in Bryan —
+          built slowly, on purpose, for the people in this town who already know
+          what good agave tastes like.
+        </p>
+        <p>
+          A third of Bryan is Mexican or Mexican-American. Four generations of
+          families who carried recipes, bottles, and better judgment about tequila
+          than most bars in Austin have. <span className="pink">We built this for you first.</span>
+        </p>
+        <p>
+          Behind the bar is <b>Dustin Batson</b> — the same hands most of Main
+          Street already knows. Ask what&rsquo;s rotating. Ask for something neat.
+          Ask him to pick.
+        </p>
+        <div className="letter__sign">
+          — The owners · <b>Downtown Bryan</b> · April 2026
+        </div>
       </div>
     </section>
   );
