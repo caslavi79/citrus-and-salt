@@ -69,6 +69,14 @@
     font-family: var(--display); font-style: italic; font-size: 13px;
     color: var(--bone-dim);
     mix-blend-mode: difference;
+    transition: background .3s ease, backdrop-filter .3s ease, border-color .3s ease;
+  }
+  .topbar.is-scrolled {
+    mix-blend-mode: normal;
+    background: linear-gradient(180deg, rgba(18,12,8,0.9), rgba(18,12,8,0.72));
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(212,170,78,0.15);
   }
   .topbar a:hover { color: var(--bone); }
   .topbar .brand { font-family: var(--script); font-size: 22px; color: var(--bone); font-style: normal; }
@@ -733,8 +741,15 @@ function useBarStatus() {
 }
 
 function Topbar() {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   return (
-    <div className="topbar">
+    <div className={`topbar ${scrolled ? 'is-scrolled' : ''}`}>
       <a href="#top" className="brand">
         <span className="p">Citrus</span>&nbsp;&amp;&nbsp;<span className="m">Salt</span>
       </a>
@@ -747,7 +762,7 @@ function Topbar() {
   );
 }
 
-function Hero({ headline, status }) {
+function Hero({ headline, status, openChooser }) {
   const H = {
     'only-in-bryan': (
       <h1 className="hero__h1">
@@ -784,7 +799,7 @@ function Hero({ headline, status }) {
         Over one hundred tequilas and mezcals. An entire <em>Mexican beer menu</em>.
       </p>
       <div className="hero__row">
-        <a href="#door" className="btn btn--primary">Find Us →</a>
+        <a href="https://maps.google.com/?q=121+N+Main+St+Bryan+TX" target="_blank" rel="noreferrer" className="btn btn--primary" onClick={(e) => { e.preventDefault(); openChooser('dir'); }}>Find Us →</a>
         <div className={`hero__note ${status.open ? 'is-open' : 'is-closed'}`}>
           <span className="lbl"><span className="dot" /> {status.label}</span>
           <span className="hrs">{status.hrs}</span>
@@ -895,7 +910,7 @@ function Door({ status, openChooser }) {
       </div>
 
       <div className="door__actions">
-        <a href="https://maps.google.com/?q=121+N+Main+St+Bryan+TX" target="_blank" rel="noreferrer" className="btn btn--primary" onClick={(e) => { e.preventDefault(); openChooser('dir'); }}>Get Directions →</a>
+        <a href="https://maps.google.com/?q=121+N+Main+St+Bryan+TX" target="_blank" rel="noreferrer" className="btn btn--primary" onClick={(e) => { e.preventDefault(); openChooser('dir'); }}>Directions →</a>
       </div>
     </section>
   );
@@ -1122,7 +1137,7 @@ function App() {
     <>
       <Topbar />
       <Burger openChooser={openChooser} />
-      <Hero headline={state.headline} status={status} />
+      <Hero headline={state.headline} status={status} openChooser={openChooser} />
       <Marquee />
       <Carta />
       <Letter />
