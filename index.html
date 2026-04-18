@@ -562,6 +562,57 @@
     align-self: flex-start; margin-top: 6px;
   }
 
+  /* ————————————————————————————— ACTION CHOOSER (call/text, maps) */
+  .chooser {
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(18,12,8,0.72);
+    backdrop-filter: blur(10px);
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: 16px;
+    animation: chooserFade .18s ease;
+  }
+  @media (min-width: 640px) {
+    .chooser { align-items: center; padding: 24px; }
+  }
+  @keyframes chooserFade { from { opacity: 0; } to { opacity: 1; } }
+  .chooser__card {
+    width: 100%; max-width: 420px;
+    background:
+      radial-gradient(600px 300px at 70% -10%, rgba(176,82,62,0.18), transparent 60%),
+      var(--ember);
+    border: 1px solid rgba(212,170,78,0.35);
+    padding: 22px 18px 14px;
+    display: flex; flex-direction: column; gap: 14px;
+    animation: chooserRise .22s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes chooserRise { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .chooser__title {
+    font-family: var(--script); color: var(--mustard);
+    font-size: 28px; line-height: 1;
+    text-align: center;
+  }
+  .chooser__opts { display: flex; flex-direction: column; gap: 8px; }
+  .chooser__opt {
+    display: block; padding: 14px 18px;
+    background: rgba(238,218,176,0.06);
+    border: 1px solid rgba(238,218,176,0.22);
+    color: var(--bone);
+    font-family: var(--display); font-size: 16px; letter-spacing: 0.04em;
+    text-align: center;
+    transition: background .2s, border-color .2s, color .2s;
+  }
+  .chooser__opt:hover, .chooser__opt:active {
+    background: rgba(238,218,176,0.12); border-color: var(--bone);
+  }
+  .chooser__cancel {
+    background: transparent; border: 0;
+    color: var(--bone-dim);
+    font-family: var(--display); font-style: italic; font-size: 13.5px;
+    padding: 8px; cursor: pointer;
+    align-self: center;
+  }
+  .chooser__cancel:hover { color: var(--bone); }
+
   /* ————————————————————————————— TWEAKS */
   .tweaks {
     position: fixed; z-index: 200;
@@ -819,7 +870,7 @@ function Letter() {
   );
 }
 
-function Door({ status }) {
+function Door({ status, openChooser }) {
   const rowTag = (days) => {
     if (!days.includes(status.activeDay)) return <span></span>;
     if (!SCHEDULE[status.activeDay]) return <span className="tag">today</span>;
@@ -834,7 +885,7 @@ function Door({ status }) {
         121 N Main St<br/>
         <span className="city">Bryan, Texas</span>
       </div>
-      <a href="tel:+19795550137" className="door__phone">(979) 555&middot;0137</a>
+      <a href="tel:+18322854598" className="door__phone" onClick={(e) => { e.preventDefault(); openChooser('phone'); }}>(832) 285&middot;4598</a>
 
       <div className="door__hours">
         <div><span className="day">Monday</span><span className="t">closed</span>{rowTag([1])}</div>
@@ -844,7 +895,7 @@ function Door({ status }) {
       </div>
 
       <div className="door__actions">
-        <a href="https://maps.google.com/?q=121+N+Main+St+Bryan+TX" target="_blank" rel="noreferrer" className="btn btn--primary">Get Directions →</a>
+        <a href="https://maps.google.com/?q=121+N+Main+St+Bryan+TX" target="_blank" rel="noreferrer" className="btn btn--primary" onClick={(e) => { e.preventDefault(); openChooser('dir'); }}>Get Directions →</a>
       </div>
     </section>
   );
@@ -936,7 +987,7 @@ function Marquee() {
   );
 }
 
-function Burger() {
+function Burger({ openChooser }) {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -960,7 +1011,7 @@ function Burger() {
         <span className="spark">— salud</span>
         <div className="tel">
           <span>Call the bar</span>
-          <a href="tel:+19795550137"><b>(979) 555&middot;0137</b></a>
+          <a href="tel:+18322854598" onClick={(e) => { e.preventDefault(); close(); openChooser('phone'); }}><b>(832) 285&middot;4598</b></a>
         </div>
       </nav>
     </>
@@ -970,8 +1021,64 @@ function Burger() {
 function StickyBar() {
   return (
     <div className="stickybar">
-      <a className="call" href="tel:+19795550137">Call</a>
+      <a className="call" href="tel:+18322854598">Call</a>
       <a className="dir" href="https://maps.google.com/?q=121+N+Main+St+Bryan+TX" target="_blank" rel="noreferrer">Directions →</a>
+    </div>
+  );
+}
+
+const CHOOSER_CONFIG = {
+  phone: {
+    title: 'Reach us —',
+    options: [
+      { label: 'Call',  href: 'tel:+18322854598' },
+      { label: 'Text',  href: 'sms:+18322854598' },
+    ],
+  },
+  dir: {
+    title: 'Get directions —',
+    options: [
+      { label: 'Apple Maps',  href: 'https://maps.apple.com/?q=121+N+Main+St+Bryan+TX', external: true },
+      { label: 'Google Maps', href: 'https://maps.google.com/?q=121+N+Main+St+Bryan+TX', external: true },
+    ],
+  },
+};
+
+function Chooser({ kind, onClose }) {
+  useEffect(() => {
+    if (!kind) return;
+    const onKey = (e) => e.key === 'Escape' && onClose();
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [kind, onClose]);
+
+  if (!kind) return null;
+  const cfg = CHOOSER_CONFIG[kind];
+
+  return (
+    <div className="chooser" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="chooser__card" onClick={(e) => e.stopPropagation()}>
+        <div className="chooser__title">{cfg.title}</div>
+        <div className="chooser__opts">
+          {cfg.options.map((o) => (
+            <a
+              key={o.label}
+              href={o.href}
+              {...(o.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+              className="chooser__opt"
+              onClick={onClose}
+            >
+              {o.label}
+            </a>
+          ))}
+        </div>
+        <button className="chooser__cancel" onClick={onClose}>Cancel</button>
+      </div>
     </div>
   );
 }
@@ -979,7 +1086,10 @@ function StickyBar() {
 function App() {
   const [state, setState] = useState(TWEAK_DEFAULTS);
   const [open, setOpen] = useState(false);
+  const [chooserKind, setChooserKind] = useState(null);
   const status = useBarStatus();
+  const openChooser = (kind) => setChooserKind(kind);
+  const closeChooser = () => setChooserKind(null);
 
   useEffect(() => {
     function onMsg(e) {
@@ -1011,14 +1121,15 @@ function App() {
   return (
     <>
       <Topbar />
-      <Burger />
+      <Burger openChooser={openChooser} />
       <Hero headline={state.headline} status={status} />
       <Marquee />
       <Carta />
       <Letter />
-      <Door status={status} />
+      <Door status={status} openChooser={openChooser} />
       <Foot />
       <Tweaks state={state} setState={setState} open={open} />
+      <Chooser kind={chooserKind} onClose={closeChooser} />
     </>
   );
 }
