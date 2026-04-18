@@ -197,7 +197,8 @@
     white-space: nowrap;
   }
   @media (min-width: 760px) { .hero__note .hrs { font-size: 34px; } }
-  .hero__note .dot { display:inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 10px var(--lime); margin-right: 6px; vertical-align: middle; }
+  .hero__note .dot { display:inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 10px var(--lime); margin-right: 6px; vertical-align: middle; transition: background .4s, box-shadow .4s; }
+  .hero__note.is-closed .dot { background: var(--clay); box-shadow: 0 0 8px rgba(176,82,62,0.5); }
 
   /* logo floats, no box around it */
   .hero__sign {
@@ -604,6 +605,77 @@ const PALETTES = {
   'lime-clay':    { mustard: '#B8C451', clay: '#B0523E', pink: '#FF6A94', label: 'Agave lime + clay' },
 };
 
+// —— Bar hours (Central Time). 0=Sun … 6=Sat. close > 1440 means crosses midnight.
+const SCHEDULE = {
+  0: { open: 19*60, close: 22*60 },   // Sun  7pm–10pm
+  1: null,                             // Mon  closed
+  2: { open: 19*60, close: 24*60 },   // Tue  7pm–12am
+  3: { open: 19*60, close: 24*60 },   // Wed  7pm–12am
+  4: { open: 19*60, close: 24*60 },   // Thu  7pm–12am
+  5: { open: 19*60, close: 26*60 },   // Fri  7pm–2am
+  6: { open: 19*60, close: 26*60 },   // Sat  7pm–2am
+};
+const DAY_ABBR = ['sun','mon','tue','wed','thu','fri','sat'];
+
+function nowCentral() {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    weekday: 'short', hour: '2-digit', hour12: false, minute: '2-digit',
+  }).formatToParts(new Date());
+  const p = Object.fromEntries(parts.map(x => [x.type, x.value]));
+  const map = { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 };
+  return { day: map[p.weekday], minutes: parseInt(p.hour,10)*60 + parseInt(p.minute,10) };
+}
+
+function fmtTime(min) {
+  const h24 = Math.floor(min/60) % 24;
+  const m = min % 60;
+  const ap = h24 >= 12 ? 'pm' : 'am';
+  const h = h24 % 12 || 12;
+  return m === 0 ? `${h} ${ap}` : `${h}:${String(m).padStart(2,'0')} ${ap}`;
+}
+
+function computeStatus() {
+  const { day, minutes } = nowCentral();
+
+  // Still inside yesterday's late-night window?
+  const yIdx = (day + 6) % 7;
+  const y = SCHEDULE[yIdx];
+  if (y && y.close > 24*60 && minutes < y.close - 24*60) {
+    return { open: true, activeDay: yIdx, label: 'open now', hrs: `until ${fmtTime(y.close - 24*60)}` };
+  }
+
+  const today = SCHEDULE[day];
+  if (today) {
+    const closeDisplay = today.close > 24*60 ? today.close - 24*60 : today.close;
+    if (minutes < today.open) {
+      return { open: false, activeDay: day, label: 'opens tonight', hrs: `${fmtTime(today.open)} · ${fmtTime(closeDisplay)}` };
+    }
+    if (minutes < (today.close > 24*60 ? 24*60 : today.close)) {
+      return { open: true, activeDay: day, label: 'open now', hrs: `until ${fmtTime(closeDisplay)}` };
+    }
+  }
+
+  // Closed now — find next open day
+  for (let i = 1; i <= 7; i++) {
+    const d = (day + i) % 7;
+    if (SCHEDULE[d]) {
+      const when = i === 1 ? 'tomorrow' : DAY_ABBR[d];
+      return { open: false, activeDay: day, label: 'closed today', hrs: `back ${when} · ${fmtTime(SCHEDULE[d].open)}` };
+    }
+  }
+  return { open: false, activeDay: day, label: 'closed', hrs: '' };
+}
+
+function useBarStatus() {
+  const [st, setSt] = useState(computeStatus);
+  useEffect(() => {
+    const id = setInterval(() => setSt(computeStatus()), 30_000);
+    return () => clearInterval(id);
+  }, []);
+  return st;
+}
+
 function Topbar() {
   return (
     <div className="topbar">
@@ -619,7 +691,7 @@ function Topbar() {
   );
 }
 
-function Hero({ headline }) {
+function Hero({ headline, status }) {
   const H = {
     'only-in-bryan': (
       <h1 className="hero__h1">
@@ -657,9 +729,9 @@ function Hero({ headline }) {
       </p>
       <div className="hero__row">
         <a href="#door" className="btn btn--primary">Find Us →</a>
-        <div className="hero__note">
-          <span className="lbl"><span className="dot" /> open tonight</span>
-          <span className="hrs">4 pm &middot; 2 am</span>
+        <div className={`hero__note ${status.open ? 'is-open' : 'is-closed'}`}>
+          <span className="lbl"><span className="dot" /> {status.label}</span>
+          <span className="hrs">{status.hrs}</span>
         </div>
       </div>
     </section>
@@ -742,7 +814,14 @@ function Letter() {
   );
 }
 
-function Door() {
+function Door({ status }) {
+  const rowTag = (days) => {
+    if (!days.includes(status.activeDay)) return <span></span>;
+    if (!SCHEDULE[status.activeDay]) return <span className="tag">today</span>;
+    if (status.open) return <span className="tag now">open now</span>;
+    return <span className="tag">tonight</span>;
+  };
+
   return (
     <section id="door" className="door">
       <div className="door__addr">
@@ -753,10 +832,10 @@ function Door() {
       <a href="tel:+19795550137" className="door__phone">(979) 555&middot;0137</a>
 
       <div className="door__hours">
-        <div><span className="day">Monday</span><span className="t">closed</span><span></span></div>
-        <div><span className="day">Tue — Thu</span><span className="t">5 pm — 12 am</span><span className="tag">open</span></div>
-        <div><span className="day">Fri — Sat</span><span className="t">4 pm — 2 am</span><span className="tag now">tonight</span></div>
-        <div><span className="day">Sunday</span><span className="t">3 pm — 10 pm</span><span className="tag">open</span></div>
+        <div><span className="day">Monday</span><span className="t">closed</span>{rowTag([1])}</div>
+        <div><span className="day">Tue — Thu</span><span className="t">7 pm — 12 am</span>{rowTag([2,3,4])}</div>
+        <div><span className="day">Fri — Sat</span><span className="t">7 pm — 2 am</span>{rowTag([5,6])}</div>
+        <div><span className="day">Sunday</span><span className="t">7 pm — 10 pm</span>{rowTag([0])}</div>
       </div>
 
       <div className="door__actions">
@@ -895,6 +974,7 @@ function StickyBar() {
 function App() {
   const [state, setState] = useState(TWEAK_DEFAULTS);
   const [open, setOpen] = useState(false);
+  const status = useBarStatus();
 
   useEffect(() => {
     function onMsg(e) {
@@ -927,11 +1007,11 @@ function App() {
     <>
       <Topbar />
       <Burger />
-      <Hero headline={state.headline} />
+      <Hero headline={state.headline} status={status} />
       <Marquee />
       <Carta />
       <Letter />
-      <Door />
+      <Door status={status} />
       <Foot />
       <Tweaks state={state} setState={setState} open={open} />
     </>
