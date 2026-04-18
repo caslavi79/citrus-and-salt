@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Citrus &amp; Salt — The only tequila bar in Bryan.</title>
 
 <template id="__bundler_thumbnail">
@@ -65,7 +65,7 @@
   .topbar {
     position: fixed; top: 0; left: 0; right: 0; z-index: 60;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 20px;
+    padding: calc(14px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 14px max(20px, env(safe-area-inset-left));
     font-family: var(--display); font-style: italic; font-size: 13px;
     color: var(--bone-dim);
   }
@@ -581,7 +581,10 @@
 
   /* ————————————————————————————— BURGER NAV */
   .burger {
-    position: fixed; top: 12px; right: 14px; z-index: 80;
+    position: fixed;
+    top: calc(12px + env(safe-area-inset-top));
+    right: max(14px, env(safe-area-inset-right));
+    z-index: 80;
     width: 44px; height: 44px;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
     background: rgba(18,12,8,0.6);
@@ -607,7 +610,7 @@
       rgba(18,12,8,0.98);
     backdrop-filter: blur(14px);
     display: flex; flex-direction: column;
-    padding: 90px 28px 40px;
+    padding: calc(90px + env(safe-area-inset-top)) max(28px, env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(28px, env(safe-area-inset-left));
     gap: 28px;
     opacity: 0; pointer-events: none;
     transition: opacity .3s ease;
@@ -655,7 +658,7 @@
     background: rgba(18,12,8,0.72);
     backdrop-filter: blur(10px);
     display: flex; align-items: flex-end; justify-content: center;
-    padding: 16px 16px max(18vh, 88px);
+    padding: 16px 16px calc(max(18vh, 88px) + env(safe-area-inset-bottom));
     animation: chooserFade .18s ease;
   }
   @media (min-width: 640px) {
