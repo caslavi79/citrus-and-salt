@@ -409,13 +409,8 @@
 
   /* ————————————————————————————— THE DOOR */
   .door {
-    padding: 56px 20px 40px;
-    max-width: 1440px; margin: 0 auto;
-    display: grid; grid-template-columns: 1fr;
-    gap: 32px; align-items: center;
-  }
-  @media (min-width: 900px) {
-    .door { grid-template-columns: 1.1fr 1fr; gap: 72px; padding: 100px 64px 60px; }
+    padding: clamp(3.5rem, 8vw, 6rem) clamp(1.25rem, 4vw, 4rem) clamp(2.5rem, 6vw, 4rem);
+    max-width: 900px; margin: 0 auto;
   }
 
   .door__addr {
@@ -464,37 +459,7 @@
 
   .door__actions { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
   @media (min-width: 760px) { .door__actions { margin-top: 36px; gap: 12px; } }
-  .door__actions .btn { flex: 1; min-width: 0; }
-  @media (min-width: 760px) { .door__actions .btn { flex: 0 0 auto; } }
-
-  .door__map {
-    position: relative;
-    aspect-ratio: 1 / 1;
-    border: 1px solid rgba(212,170,78,0.3);
-    background:
-      radial-gradient(ellipse at 50% 50%, rgba(176,82,62,0.2), transparent 65%),
-      linear-gradient(180deg, rgba(38,26,16,0.8), rgba(18,12,8,0.9));
-    overflow: hidden;
-    padding: 20px;
-  }
-  .door__map svg { position:absolute; inset:0; width:100%; height:100%; }
-  .door__map .mc { position: absolute; font-family: var(--body); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone-dim); z-index: 2; white-space: nowrap; }
-  .door__map .mc.tl { top: 16px; left: 16px; }
-  .door__map .mc.tr { top: 16px; right: 16px; color: var(--mustard); }
-  .door__map .mc.bl { bottom: 16px; left: 16px; }
-  .door__map .mc.br { bottom: 16px; right: 16px; color: var(--clay); }
-
-  .door__map .pin {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    text-align: center; z-index: 3;
-  }
-  .door__map .pin .n { font-family: var(--script); font-size: 32px; color: var(--pink); line-height: 1; text-shadow: 0 0 18px rgba(255,106,148,0.6); white-space: nowrap; }
-  .door__map .pin .aq { font-family: var(--display); font-style: italic; font-size: 12px; color: var(--bone); margin-top: 4px; }
-  .door__map .pin .d { width: 12px; height: 12px; border-radius:50%; background: var(--pink); margin: 10px auto 0; box-shadow: 0 0 0 5px rgba(255,106,148,0.2), 0 0 16px rgba(255,106,148,0.8); animation: pulseD 2s ease-in-out infinite; }
-  @keyframes pulseD {
-    0%,100% { box-shadow: 0 0 0 5px rgba(255,106,148,0.2), 0 0 16px rgba(255,106,148,0.8); }
-    50%     { box-shadow: 0 0 0 13px rgba(255,106,148,0), 0 0 16px rgba(255,106,148,0.8); }
-  }
+  .door__actions .btn { min-width: 0; }
 
   /* ————————————————————————————— FOOTER */
   footer {
@@ -780,55 +745,22 @@ function Letter() {
 function Door() {
   return (
     <section id="door" className="door">
-      <div>
-        <div className="door__addr">
-          <span className="s">come see us —</span>
-          121 N Main St<br/>
-          <span className="city">Bryan, Texas</span>
-        </div>
-        <a href="tel:+19795550137" className="door__phone">(979) 555&middot;0137</a>
+      <div className="door__addr">
+        <span className="s">come see us —</span>
+        121 N Main St<br/>
+        <span className="city">Bryan, Texas</span>
+      </div>
+      <a href="tel:+19795550137" className="door__phone">(979) 555&middot;0137</a>
 
-        <div className="door__hours">
-          <div><span className="day">Monday</span><span className="t">closed</span><span></span></div>
-          <div><span className="day">Tue — Thu</span><span className="t">5 pm — 12 am</span><span className="tag">open</span></div>
-          <div><span className="day">Fri — Sat</span><span className="t">4 pm — 2 am</span><span className="tag now">tonight</span></div>
-          <div><span className="day">Sunday</span><span className="t">3 pm — 10 pm</span><span className="tag">open</span></div>
-        </div>
-
-        <div className="door__actions">
-          <a href="#" className="btn btn--primary">Get Directions →</a>
-          <a href="#" className="btn btn--ghost">Reservations</a>
-        </div>
+      <div className="door__hours">
+        <div><span className="day">Monday</span><span className="t">closed</span><span></span></div>
+        <div><span className="day">Tue — Thu</span><span className="t">5 pm — 12 am</span><span className="tag">open</span></div>
+        <div><span className="day">Fri — Sat</span><span className="t">4 pm — 2 am</span><span className="tag now">tonight</span></div>
+        <div><span className="day">Sunday</span><span className="t">3 pm — 10 pm</span><span className="tag">open</span></div>
       </div>
 
-      <div className="door__map">
-        <span className="mc tl">N 30.6744°</span>
-        <span className="mc tr">Main &amp; 26th</span>
-        <span className="mc bl">W 96.3702°</span>
-        <span className="mc br">Bryan, TX</span>
-        <svg viewBox="0 0 400 400" preserveAspectRatio="none">
-          <g stroke="rgba(238,218,176,0.08)" strokeWidth="1" fill="none">
-            <line x1="0" y1="80" x2="400" y2="80"/>
-            <line x1="0" y1="160" x2="400" y2="160"/>
-            <line x1="0" y1="240" x2="400" y2="240"/>
-            <line x1="0" y1="320" x2="400" y2="320"/>
-            <line x1="80" y1="0" x2="80" y2="400"/>
-            <line x1="160" y1="0" x2="160" y2="400"/>
-            <line x1="240" y1="0" x2="240" y2="400"/>
-            <line x1="320" y1="0" x2="320" y2="400"/>
-          </g>
-          <g stroke="rgba(212,170,78,0.55)" strokeWidth="2" fill="none">
-            <line x1="200" y1="0" x2="200" y2="400"/>
-            <line x1="0" y1="200" x2="400" y2="200"/>
-          </g>
-          <text x="210" y="20" fill="rgba(212,170,78,0.8)" fontFamily="Space Grotesk" fontSize="10" letterSpacing="1">MAIN ST</text>
-          <text x="10" y="195" fill="rgba(212,170,78,0.8)" fontFamily="Space Grotesk" fontSize="10" letterSpacing="1">26TH ST</text>
-        </svg>
-        <div className="pin">
-          <div className="n">Citrus &amp; Salt</div>
-          <div className="aq">aquí estamos</div>
-          <div className="d" />
-        </div>
+      <div className="door__actions">
+        <a href="https://maps.google.com/?q=121+N+Main+St+Bryan+TX" target="_blank" rel="noreferrer" className="btn btn--primary">Get Directions →</a>
       </div>
     </section>
   );
