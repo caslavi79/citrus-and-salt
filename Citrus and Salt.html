@@ -1,0 +1,1010 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Citrus &amp; Salt — The only tequila bar in Bryan.</title>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <rect width="120" height="120" fill="#120C08"/>
+    <rect x="8" y="8" width="104" height="104" fill="none" stroke="#E91E9E" stroke-width="1.2"/>
+    <rect x="12" y="12" width="96" height="96" fill="none" stroke="#29D4E8" stroke-width="0.8"/>
+    <text x="60" y="56" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="22" fill="#FF6A94">Citrus</text>
+    <text x="60" y="72" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="14" fill="#29D4E8">&amp; Salt</text>
+    <text x="60" y="92" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="7" fill="#C4E84A" letter-spacing="2">TEQUILA BAR</text>
+  </svg>
+</template>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yellowtail&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --night:    #120C08;
+    --night-2:  #1A1209;
+    --ember:    #261A10;
+    --plaster:  #EEDAB0;
+    --bone:     #F5E9CF;
+    --bone-dim: #A99372;
+    --mustard:  #D4AA4E;
+    --clay:     #B0523E;
+    --pink:     #FF6A94;
+    --cyan:     #29D4E8;
+    --lime:     #C4E84A;
+
+    --display: 'Fraunces', Georgia, serif;
+    --script:  'Yellowtail', cursive;
+    --body:    'Space Grotesk', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--night); color: var(--bone); font-family: var(--body); }
+  body {
+    background:
+      radial-gradient(1200px 900px at 70% -5%, rgba(176,82,62,0.16), transparent 55%),
+      radial-gradient(1000px 700px at 5% 30%, rgba(212,170,78,0.10), transparent 55%),
+      radial-gradient(900px 700px at 90% 80%, rgba(255,106,148,0.06), transparent 55%),
+      var(--night);
+    overflow-x: hidden;
+  }
+  body::before {
+    content:""; position: fixed; inset:0; pointer-events:none; z-index: 100;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.75  0 0 0 0 0.45  0 0 0 0.09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    opacity: .3; mix-blend-mode: overlay;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display:block; max-width:100%; }
+  ::selection { background: var(--mustard); color: var(--night); }
+
+  /* ————————————————————————————— SMALL NAV (mobile-first) */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px;
+    font-family: var(--display); font-style: italic; font-size: 13px;
+    color: var(--bone-dim);
+    mix-blend-mode: difference;
+  }
+  .topbar a:hover { color: var(--bone); }
+  .topbar .brand { font-family: var(--script); font-size: 22px; color: var(--bone); font-style: normal; }
+  .topbar .brand .p { color: var(--pink); }
+  .topbar .brand .m { color: var(--mustard); }
+  .topbar .links { display: none; gap: 26px; }
+  .topbar .links a { white-space: nowrap; }
+  @media (min-width: 760px) {
+    .topbar { padding: 18px 36px; font-size: 14px; }
+    .topbar .links { display: flex; }
+  }
+
+  /* ————————————————————————————— HERO: mobile-first, centered */
+  .hero {
+    position: relative;
+    container-type: inline-size;
+    padding: clamp(6.25rem, 17vw, 8.75rem) clamp(1rem, 4vw, 4rem) clamp(3.25rem, 9vw, 5rem);
+    display: flex; flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: clamp(1.25rem, 4vw, 2rem);
+    overflow: hidden;
+  }
+  @media (min-width: 960px) {
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      grid-template-areas:
+        "only sign"
+        "h1 sign"
+        "lede sign"
+        "row sign";
+      grid-template-rows: auto auto auto 1fr;
+      column-gap: clamp(2rem, 5vw, 4rem);
+      row-gap: clamp(1rem, 2.5vw, 2rem);
+      align-items: start;
+      text-align: left;
+      min-height: 100vh;
+    }
+    .hero__only { grid-area: only; align-self: end; }
+    .hero__h1 { grid-area: h1; }
+    .hero__sign { grid-area: sign; align-self: center; }
+    .hero__lede { grid-area: lede; }
+    .hero__row { grid-area: row; align-self: start; }
+  }
+
+  .hero__only {
+    display: none;
+  }
+  @media (min-width: 960px) {
+    .hero__only {
+      display: block;
+      font-family: var(--script); color: var(--mustard);
+      font-size: clamp(2.5rem, 4.75vw, 4.25rem); line-height: 0.9;
+      margin-bottom: -0.25rem;
+    }
+  }
+
+  .hero__h1 {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(2.625rem, 11.5vw, 8.25rem);
+    line-height: 0.95; letter-spacing: -0.03em;
+    color: var(--bone);
+    text-wrap: balance;
+    max-width: 15ch;
+  }
+  @media (min-width: 960px) { .hero__h1 { max-width: 12ch; } }
+  .hero__h1 .it { font-style: italic; color: var(--plaster); font-weight: 400; }
+  .hero__h1 .period { color: var(--pink); }
+
+  .hero__lede {
+    max-width: 52ch;
+    margin-top: clamp(-6rem, -16vw, -2.5rem);
+    margin-bottom: clamp(2.5rem, 16vw, 6rem);
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(1rem, 2.1vw, 1.375rem); line-height: 1.5;
+    color: var(--plaster);
+    text-wrap: pretty;
+  }
+  @media (min-width: 960px) { .hero__lede { line-height: 1.45; margin-top: 0; margin-bottom: 0; } }
+  .hero__lede em { font-style: italic; color: var(--mustard); font-family: var(--display); }
+
+  .hero__row {
+    display: flex; flex-direction: column; align-items: center;
+    gap: clamp(0.875rem, 2.5vw, 1.5rem);
+  }
+  @media (min-width: 960px) {
+    .hero__row { flex-direction: row; align-items: center; justify-content: flex-start; gap: clamp(1.5rem, 2.75vw, 2rem); }
+  }
+  .hero__row .btn {
+    min-height: clamp(2.5rem, 5.5vw, 3rem);
+    padding: clamp(0.55rem, 1.8vw, 0.875rem) clamp(1.5rem, 4vw, 2rem);
+  }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    min-height: 52px;
+    padding: 16px 24px;
+    font-family: var(--display); font-weight: 500; font-size: 14px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid transparent;
+    transition: all .25s ease;
+    cursor: pointer;
+  }
+  @media (min-width: 760px) { .btn { padding: 18px 28px; } }
+  .btn--primary { background: var(--mustard); color: var(--night); }
+  .btn--primary:hover { background: var(--pink); box-shadow: 0 0 30px rgba(255,106,148,0.45); }
+  .btn--ghost { color: var(--bone); border-color: rgba(238,218,176,0.35); }
+  .btn--ghost:hover { border-color: var(--bone); background: rgba(238,218,176,0.05); }
+
+  /* hand-scrawled "tonight" note — not a card, not bordered */
+  .hero__note {
+    display: inline-flex; flex-direction: column; gap: 2px;
+    transform: rotate(-2.5deg);
+    transform-origin: center;
+    text-align: left;
+  }
+  @media (min-width: 960px) { .hero__note { transform-origin: left center; } }
+  .hero__note .lbl {
+    font-family: var(--display); font-style: italic; font-size: 13px;
+    color: var(--bone-dim);
+  }
+  .hero__note .hrs {
+    font-family: var(--script); font-size: 28px; color: var(--pink);
+    line-height: 1; text-shadow: 0 0 14px rgba(255,106,148,0.45);
+    white-space: nowrap;
+  }
+  @media (min-width: 760px) { .hero__note .hrs { font-size: 34px; } }
+  .hero__note .dot { display:inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 10px var(--lime); margin-right: 6px; vertical-align: middle; }
+
+  /* logo floats, no box around it */
+  .hero__sign {
+    position: relative; z-index: 1;
+    transform: rotate(-1.5deg);
+    animation: flicker 7s infinite;
+    width: 100%;
+    max-width: clamp(20rem, 94vw, 36rem);
+  }
+  @media (min-width: 960px) { .hero__sign { max-width: none; } }
+  .hero__sign img { width: 100%; max-width: 620px; margin: 0 auto; }
+  @media (min-width: 960px) { .hero__sign img { margin-left: auto; margin-right: 0; } }
+  @keyframes flicker {
+    0%, 96%, 100% { filter: drop-shadow(0 0 26px rgba(255,106,148,0.5)) drop-shadow(0 0 52px rgba(41,212,232,0.2)) drop-shadow(0 30px 60px rgba(0,0,0,0.7)); }
+    97% { filter: drop-shadow(0 0 8px rgba(255,106,148,0.25)) drop-shadow(0 30px 60px rgba(0,0,0,0.7)); }
+    98% { filter: drop-shadow(0 0 26px rgba(255,106,148,0.5)) drop-shadow(0 0 52px rgba(41,212,232,0.2)) drop-shadow(0 30px 60px rgba(0,0,0,0.7)); }
+  }
+
+  /* hero backdrop — soft wall wash behind everything */
+  .hero::before {
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(600px 460px at 72% 48%, rgba(255,170,100,0.16), transparent 65%),
+      radial-gradient(500px 400px at 25% 55%, rgba(212,170,78,0.07), transparent 65%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* floating scribble marks around hero — agave / citrus hints, not literal */
+  .scribble {
+    position: absolute; z-index: 1; pointer-events: none;
+    font-family: var(--script); color: var(--clay);
+    opacity: 0.35;
+  }
+  .scribble.s1 { top: 18%; left: 6%; font-size: 22px; transform: rotate(-18deg); color: var(--mustard); opacity: 0.5; }
+  .scribble.s2 { bottom: 20%; right: 8%; font-size: 20px; transform: rotate(8deg); color: var(--pink); opacity: 0.45; }
+  @media (max-width: 960px) { .scribble { display: none; } }
+
+  /* ————————————————————————————— BRAND MARQUEE */
+  .marquee {
+    position: relative;
+    margin: 24px 0;
+    padding: 20px 0;
+    background: linear-gradient(180deg, rgba(38,26,16,0.92), rgba(26,18,9,0.92));
+    border-top: 1px solid rgba(238,218,176,0.22);
+    border-bottom: 1px solid rgba(238,218,176,0.22);
+    box-shadow:
+      0 14px 30px -14px rgba(0,0,0,0.7),
+      inset 0 1px 0 rgba(238,218,176,0.06);
+  }
+  @media (min-width: 760px) { .marquee { margin: 36px 0; padding: 26px 0; } }
+  .marquee__clip { overflow: hidden; }
+  .marquee__lbl { display: none; }
+  .marquee__track {
+    display: flex; gap: 48px;
+    animation: slide 40s linear infinite;
+    width: max-content;
+    align-items: center;
+  }
+  @media (min-width: 760px) { .marquee__track { gap: 64px; } }
+  .marquee__track:hover { animation-play-state: paused; }
+  .marquee__item {
+    font-family: var(--display); font-weight: 400;
+    font-size: 17px; color: var(--plaster);
+    white-space: nowrap;
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  @media (min-width: 760px) { .marquee__item { font-size: 22px; } }
+  .marquee__item em {
+    font-family: var(--script); font-style: normal;
+    font-size: 1.35em;
+    color: var(--mustard);
+  }
+  .marquee__item.p em { color: var(--pink); }
+  .marquee__item.c em { color: var(--cyan); }
+  .marquee__item.l em { color: var(--lime); }
+  .marquee__item .r {
+    font-style: italic; font-size: 0.7em; color: var(--bone-dim);
+    letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .marquee__dot {
+    flex: 0 0 auto;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--mustard); opacity: 0.6;
+  }
+  @keyframes slide {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .carta {
+    padding: 64px 20px 48px;
+    max-width: 1440px; margin: 0 auto;
+  }
+  @media (min-width: 760px) { .carta { padding: 120px 64px 100px; } }
+
+  .carta__head {
+    display: grid; grid-template-columns: 1fr; gap: 18px;
+    align-items: end;
+    margin-bottom: 32px;
+    padding-bottom: 22px;
+    border-bottom: 1px dashed rgba(238,218,176,0.25);
+  }
+  @media (min-width: 760px) {
+    .carta__head { grid-template-columns: 1fr auto; gap: 40px; margin-bottom: 56px; padding-bottom: 28px; }
+  }
+
+  .carta__h {
+    font-family: var(--display); font-weight: 400;
+    font-size: 28px;
+    line-height: 1; color: var(--bone);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  @media (min-width: 760px) { .carta__h { font-size: clamp(44px, 5.5vw, 78px); line-height: 0.95; } }
+  .carta__h .s { font-family: var(--script); color: var(--mustard); font-size: 1.08em; line-height: 0.85; }
+  .carta__h .it { font-style: italic; color: var(--plaster); }
+
+  .carta__meta {
+    display: flex; flex-direction: column; gap: 4px;
+    font-family: var(--display); font-style: italic; font-size: 14px;
+    color: var(--bone-dim);
+    text-align: left;
+  }
+  .carta__meta b { font-family: var(--script); font-style: normal; font-weight: 400; color: var(--pink); font-size: 24px; line-height: 1.05; white-space: normal; }
+  @media (min-width: 760px) {
+    .carta__meta { text-align: right; font-size: 15px; }
+    .carta__meta b { font-size: 28px; white-space: nowrap; }
+  }
+
+  .drink {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 16px; row-gap: 4px;
+    padding: 18px 0 16px;
+    border-bottom: 1px dashed rgba(238,218,176,0.15);
+    align-items: baseline;
+  }
+  .drink:last-child { border-bottom: none; }
+  @media (min-width: 640px) {
+    .drink { column-gap: 40px; padding: 32px 0 28px; }
+  }
+
+  .drink__name {
+    font-family: var(--script);
+    font-size: 30px;
+    line-height: 0.98;
+    color: var(--bone);
+  }
+  @media (min-width: 640px) { .drink__name { font-size: clamp(48px, 5.5vw, 72px); line-height: 0.9; } }
+  .drink__name.m { color: var(--mustard); }
+  .drink__name.p { color: var(--pink); }
+  .drink__name.c { color: var(--cyan); }
+  .drink__name.l { color: var(--lime); }
+  .drink__name.k { color: var(--clay); }
+
+  .drink__body {
+    margin-top: 6px;
+    max-width: 580px;
+    font-family: var(--display); font-weight: 400;
+    font-size: 14.5px; line-height: 1.5; color: var(--plaster);
+  }
+  @media (min-width: 760px) { .drink__body { margin-top: 10px; font-size: 17px; } }
+  .drink__body .ing {
+    font-style: italic; color: var(--bone-dim);
+    display: block; margin-top: 4px; font-size: 13px;
+  }
+  @media (min-width: 760px) { .drink__body .ing { font-size: 14.5px; margin-top: 6px; } }
+
+  .drink__price {
+    font-family: var(--display); font-weight: 500;
+    font-size: 17px; color: var(--mustard);
+    white-space: nowrap; align-self: baseline;
+  }
+  @media (min-width: 760px) { .drink__price { font-size: 22px; } }
+
+  /* ————————————————————————————— THE LETTER */
+  .letter {
+    position: relative;
+    padding: 52px 20px 40px;
+    max-width: 900px; margin: 0 auto;
+  }
+  @media (min-width: 760px) { .letter { padding: 100px 64px 80px; } }
+
+  .letter__mark {
+    font-family: var(--script); color: var(--mustard);
+    font-size: 28px; line-height: 1; margin-bottom: 18px;
+  }
+  @media (min-width: 760px) { .letter__mark { font-size: 36px; margin-bottom: 24px; } }
+  .letter p {
+    font-family: var(--display); font-weight: 400;
+    font-size: 16.5px;
+    line-height: 1.55; color: var(--plaster);
+    text-wrap: pretty;
+  }
+  @media (min-width: 760px) { .letter p { font-size: clamp(20px, 2.1vw, 28px); line-height: 1.45; } }
+  .letter p + p { margin-top: 22px; }
+  .letter em { font-style: italic; color: var(--mustard); }
+  .letter b { font-weight: 500; color: var(--bone); }
+  .letter .pink { color: var(--pink); font-style: italic; }
+
+  .letter__sign {
+    margin-top: 40px; padding-top: 24px;
+    border-top: 1px dashed rgba(238,218,176,0.2);
+    font-family: var(--display); font-style: italic;
+    font-size: 16px; color: var(--bone-dim);
+    line-height: 1.5;
+  }
+  .letter__sign b { color: var(--bone); font-style: normal; }
+
+  /* ————————————————————————————— THE DOOR */
+  .door {
+    padding: 56px 20px 40px;
+    max-width: 1440px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr;
+    gap: 32px; align-items: center;
+  }
+  @media (min-width: 900px) {
+    .door { grid-template-columns: 1.1fr 1fr; gap: 72px; padding: 100px 64px 60px; }
+  }
+
+  .door__addr {
+    font-family: var(--display); font-weight: 400;
+    font-size: 28px; line-height: 1.02;
+    letter-spacing: -0.015em;
+    color: var(--bone);
+  }
+  @media (min-width: 760px) { .door__addr { font-size: clamp(44px, 5vw, 72px); line-height: 0.95; letter-spacing: -0.02em; } }
+  .door__addr .s { font-family: var(--script); color: var(--mustard); font-size: 0.75em; line-height: 0.9; display: block; margin-bottom: 8px; }
+  .door__addr .city { font-style: italic; color: var(--plaster); }
+
+  .door__phone {
+    margin-top: 18px; display: inline-block;
+    font-family: var(--script); color: var(--pink);
+    font-size: 30px; line-height: 1;
+    text-shadow: 0 0 18px rgba(255,106,148,0.35);
+    white-space: nowrap;
+  }
+  @media (min-width: 760px) { .door__phone { margin-top: 28px; font-size: 46px; } }
+  .door__phone:hover { color: var(--mustard); }
+
+  .door__hours {
+    margin-top: 24px;
+    font-family: var(--display); font-size: 14.5px; line-height: 1.6; color: var(--plaster);
+  }
+  .door__hours div {
+    display: grid;
+    grid-template-columns: 78px 1fr auto;
+    gap: 8px; align-items: baseline;
+    padding: 4px 0;
+  }
+  .door__hours .t { color: var(--bone); white-space: nowrap; }
+  @media (min-width: 760px) {
+    .door__hours { margin-top: 40px; font-size: 16px; line-height: 1.9; }
+    .door__hours div { grid-template-columns: 150px 1fr auto; padding: 2px 0; }
+  }
+  .door__hours .day { font-style: italic; color: var(--bone-dim); }
+  .door__hours .tag {
+    font-family: var(--display); font-style: italic; font-size: 12.5px;
+    color: var(--pink);
+  }
+  .door__hours .tag.now::before {
+    content: "●"; margin-right: 6px; color: var(--lime);
+  }
+
+  .door__actions { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
+  @media (min-width: 760px) { .door__actions { margin-top: 36px; gap: 12px; } }
+  .door__actions .btn { flex: 1; min-width: 0; }
+  @media (min-width: 760px) { .door__actions .btn { flex: 0 0 auto; } }
+
+  .door__map {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border: 1px solid rgba(212,170,78,0.3);
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(176,82,62,0.2), transparent 65%),
+      linear-gradient(180deg, rgba(38,26,16,0.8), rgba(18,12,8,0.9));
+    overflow: hidden;
+    padding: 20px;
+  }
+  .door__map svg { position:absolute; inset:0; width:100%; height:100%; }
+  .door__map .mc { position: absolute; font-family: var(--body); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bone-dim); z-index: 2; white-space: nowrap; }
+  .door__map .mc.tl { top: 16px; left: 16px; }
+  .door__map .mc.tr { top: 16px; right: 16px; color: var(--mustard); }
+  .door__map .mc.bl { bottom: 16px; left: 16px; }
+  .door__map .mc.br { bottom: 16px; right: 16px; color: var(--clay); }
+
+  .door__map .pin {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    text-align: center; z-index: 3;
+  }
+  .door__map .pin .n { font-family: var(--script); font-size: 32px; color: var(--pink); line-height: 1; text-shadow: 0 0 18px rgba(255,106,148,0.6); white-space: nowrap; }
+  .door__map .pin .aq { font-family: var(--display); font-style: italic; font-size: 12px; color: var(--bone); margin-top: 4px; }
+  .door__map .pin .d { width: 12px; height: 12px; border-radius:50%; background: var(--pink); margin: 10px auto 0; box-shadow: 0 0 0 5px rgba(255,106,148,0.2), 0 0 16px rgba(255,106,148,0.8); animation: pulseD 2s ease-in-out infinite; }
+  @keyframes pulseD {
+    0%,100% { box-shadow: 0 0 0 5px rgba(255,106,148,0.2), 0 0 16px rgba(255,106,148,0.8); }
+    50%     { box-shadow: 0 0 0 13px rgba(255,106,148,0), 0 0 16px rgba(255,106,148,0.8); }
+  }
+
+  /* ————————————————————————————— FOOTER */
+  footer {
+    padding: 28px 20px calc(28px + env(safe-area-inset-bottom)); max-width: 1440px; margin: 0 auto;
+    border-top: 1px dashed rgba(238,218,176,0.18);
+    display: flex; flex-direction: column; gap: 14px;
+    font-family: var(--display); font-style: italic; font-size: 12.5px;
+    color: var(--bone-dim);
+  }
+  @media (min-width: 760px) {
+    footer {
+      padding: 40px 64px 32px; margin-bottom: 0;
+      flex-direction: row; flex-wrap: wrap; justify-content: space-between;
+      gap: 16px; font-size: 13px;
+    }
+  }
+  footer .vice {
+    color: var(--plaster);
+  }
+  footer .vice b { color: #B895FF; font-weight: 500; font-style: normal; }
+  footer .vice a { color: #B895FF; border-bottom: 1px dotted rgba(184,149,255,0.5); }
+  footer .vice a:hover { color: var(--bone); border-bottom-color: var(--bone); }
+
+  /* kill sticky bar */
+  .stickybar { display: none; }
+
+  /* ————————————————————————————— BURGER NAV */
+  .burger {
+    position: fixed; top: 12px; right: 14px; z-index: 80;
+    width: 44px; height: 44px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+    background: rgba(18,12,8,0.6);
+    border: 1px solid rgba(212,170,78,0.35);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+  }
+  .burger span {
+    display: block; width: 18px; height: 1.5px;
+    background: var(--bone);
+    transition: transform .3s ease, opacity .2s ease;
+  }
+  .burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  @media (min-width: 760px) { .burger { display: none; } }
+
+  .menu {
+    position: fixed; inset: 0; z-index: 75;
+    background:
+      radial-gradient(600px 480px at 70% 20%, rgba(176,82,62,0.22), transparent 60%),
+      radial-gradient(500px 400px at 20% 80%, rgba(212,170,78,0.12), transparent 60%),
+      rgba(18,12,8,0.98);
+    backdrop-filter: blur(14px);
+    display: flex; flex-direction: column;
+    padding: 90px 28px 40px;
+    gap: 28px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s ease;
+  }
+  .menu.open { opacity: 1; pointer-events: auto; }
+  .menu a {
+    font-family: var(--display); font-weight: 400;
+    font-size: 36px; line-height: 1;
+    color: var(--bone); letter-spacing: -0.01em;
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(238,218,176,0.15);
+  }
+  .menu a .n {
+    font-family: var(--display); font-style: italic; font-weight: 400;
+    font-size: 13px; color: var(--mustard);
+    letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .menu a:last-of-type { border-bottom: none; }
+  .menu .tel {
+    margin-top: auto;
+    display: flex; flex-direction: column; gap: 8px;
+    padding-top: 28px;
+    border-top: 1px dashed rgba(238,218,176,0.15);
+  }
+  .menu .tel b {
+    font-family: var(--script); color: var(--pink);
+    font-size: 40px; line-height: 1; font-weight: 400;
+    text-shadow: 0 0 18px rgba(255,106,148,0.35);
+  }
+  .menu .tel span {
+    font-family: var(--display); font-style: italic; font-size: 13px;
+    color: var(--bone-dim);
+    letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .menu .spark {
+    font-family: var(--script); color: var(--mustard);
+    font-size: 24px; line-height: 1; transform: rotate(-4deg);
+    align-self: flex-start; margin-top: 6px;
+  }
+
+  /* ————————————————————————————— TWEAKS */
+  .tweaks {
+    position: fixed; z-index: 200;
+    left: 12px; right: 12px; bottom: 12px;
+    max-height: 70vh; overflow-y: auto;
+    background: rgba(18,12,8,0.96); backdrop-filter: blur(20px);
+    border: 1px solid rgba(212,170,78,0.4);
+    padding: 18px;
+    color: var(--bone);
+    display: none;
+  }
+  @media (min-width: 760px) {
+    .tweaks { left: auto; right: 20px; bottom: 20px; width: 280px; padding: 20px; max-height: none; }
+  }
+  .tweaks.open { display: block; }
+  .tweaks h4 { font-family: var(--script); font-size: 28px; color: var(--mustard); margin-bottom: 14px; line-height: 0.9; }
+  .tweaks label { display: block; margin-bottom: 14px; }
+  .tweaks label span { display: block; margin-bottom: 6px; font-family: var(--display); font-style: italic; font-size: 13px; color: var(--bone-dim); }
+  .tweaks select {
+    width: 100%; background: var(--night); color: var(--bone);
+    border: 1px solid rgba(212,170,78,0.3); padding: 8px 10px;
+    font-family: var(--body); font-size: 13px;
+  }
+  .tweaks .row { display:flex; gap: 6px; }
+  .tweaks .sw { flex:1; aspect-ratio: 1; border: 1.5px solid rgba(238,218,176,0.15); cursor: pointer; }
+  .tweaks .sw.sel { border-color: var(--bone); }
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "palette": "mustard-clay",
+  "headline": "only-in-bryan",
+  "flicker": true
+}/*EDITMODE-END*/;
+
+const PALETTES = {
+  'mustard-clay': { mustard: '#D4AA4E', clay: '#B0523E', pink: '#FF6A94', label: 'Mustard + clay (default)' },
+  'amber-rust':   { mustard: '#E8A44C', clay: '#8E3A24', pink: '#FF6A94', label: 'Amber + rust' },
+  'bone-pink':    { mustard: '#E6D6B2', clay: '#B0523E', pink: '#FF3D7F', label: 'Bone + hot pink' },
+  'lime-clay':    { mustard: '#B8C451', clay: '#B0523E', pink: '#FF6A94', label: 'Agave lime + clay' },
+};
+
+function Topbar() {
+  return (
+    <div className="topbar">
+      <a href="#top" className="brand">
+        <span className="p">Citrus</span>&nbsp;&amp;&nbsp;<span className="m">Salt</span>
+      </a>
+      <div className="links">
+        <a href="#carta">The List</a>
+        <a href="#letter">The Room</a>
+        <a href="#door">Find Us</a>
+      </div>
+    </div>
+  );
+}
+
+function Hero({ headline }) {
+  const H = {
+    'only-in-bryan': (
+      <h1 className="hero__h1">
+        The <span className="it">only</span> tequila bar in Bryan<span className="period">.</span>
+      </h1>
+    ),
+    'zero-to-one': (
+      <h1 className="hero__h1">
+        Zero to <span className="it">one<span className="period">.</span></span><br/>
+        Bryan&rsquo;s first<br/>
+        tequila bar.
+      </h1>
+    ),
+    'on-main': (
+      <h1 className="hero__h1">
+        Tequila,<br/>
+        <span className="it">finally</span><br/>
+        on Main<span className="period">.</span>
+      </h1>
+    ),
+  }[headline];
+
+  return (
+    <section id="top" className="hero">
+      <span className="scribble s1">· 100+ agaves ·</span>
+      <span className="scribble s2">salud</span>
+
+      <span className="hero__only">For Bryan —</span>
+      {H}
+      <div className="hero__sign">
+        <img src="logo-neon.png" alt="Citrus &amp; Salt — Tequila Bar" />
+      </div>
+      <p className="hero__lede">
+        Over one hundred tequilas and mezcals. An entire <em>Mexican beer menu</em>.
+      </p>
+      <div className="hero__row">
+        <a href="#door" className="btn btn--primary">Find Us →</a>
+        <div className="hero__note">
+          <span className="lbl"><span className="dot" /> open tonight</span>
+          <span className="hrs">4 pm &middot; 2 am</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Carta() {
+  const drinks = [
+    { name: 'Diablo del Playa',             color: 'p', price: '$14',
+      desc: 'Slow heat, long finish. The one that sells itself.',
+      ing:  'Reposado · orange curaçao · habanero syrup · pineapple · lime' },
+    { name: 'The Slow Burn',                color: 'c', price: '$13',
+      desc: 'Cool on the front, warm on the back. Drinks like August.',
+      ing:  'Blanco · triple sec · cucumber & jalapeño syrup · lime' },
+    { name: 'Soot, Spice & Everything Nice', color: 'k', price: '$15',
+      desc: 'Smoke, warmth, a little holiday in a glass.',
+      ing:  'Mezcal · orange curaçao · cinnamon syrup · fresh orange' },
+    { name: 'La Casa',                      color: 'm', price: '$12',
+      desc: 'The one we drink on shift. The one we stand behind.',
+      ing:  'Blanco · fresh lime · orange liqueur · salt rim' },
+    { name: 'Oaxaca Viejo',                 color: 'l', price: '$16',
+      desc: 'The one you stay for a second of.',
+      ing:  'Mezcal · reposado · agave · chocolate bitters · orange oil' },
+  ];
+
+  return (
+    <section id="carta" className="carta">
+      <div className="carta__head">
+        <h2 className="carta__h">
+          <span className="s">La Carta</span> Dustin&rsquo;s<br/>
+          <span className="it">originals</span>, poured by him.
+        </h2>
+        <div className="carta__meta">
+          <span>and behind them —</span>
+          <b>100+ tequilas &amp; mezcals</b>
+          <span>plus the whole Mexican beer wall</span>
+        </div>
+      </div>
+
+      {drinks.map((d, i) => (
+        <div className="drink" key={i}>
+          <div>
+            <div className={`drink__name ${d.color}`}>{d.name}</div>
+            <div className="drink__body">
+              {d.desc}
+              <span className="ing">{d.ing}</span>
+            </div>
+          </div>
+          <div className="drink__price">{d.price}</div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function Letter() {
+  return (
+    <section id="letter" className="letter">
+      <div className="letter__mark">A note —</div>
+      <p>
+        Until this spring, if you wanted a real tequila bar, you drove to Austin.
+        <em> Not anymore.</em> Citrus &amp; Salt is the only one in Bryan —
+        built slowly, on purpose, for the people in this town who already know
+        what good agave tastes like.
+      </p>
+      <p>
+        A third of Bryan is Mexican or Mexican-American. Four generations of
+        families who carried recipes, bottles, and better judgment about tequila
+        than most bars in Austin have. <span className="pink">We built this for you first.</span>
+      </p>
+      <p>
+        Behind the bar is <b>Dustin Batson</b> — the same hands most of Main
+        Street already knows. Ask what&rsquo;s rotating. Ask for something neat.
+        Ask him to pick.
+      </p>
+      <div className="letter__sign">
+        — The owners · <b>Downtown Bryan</b> · April 2026
+      </div>
+    </section>
+  );
+}
+
+function Door() {
+  return (
+    <section id="door" className="door">
+      <div>
+        <div className="door__addr">
+          <span className="s">come see us —</span>
+          212 N Main St<br/>
+          <span className="city">Bryan, Texas</span>
+        </div>
+        <a href="tel:+19795550137" className="door__phone">(979) 555&middot;0137</a>
+
+        <div className="door__hours">
+          <div><span className="day">Monday</span><span className="t">closed</span><span></span></div>
+          <div><span className="day">Tue — Thu</span><span className="t">5 pm — 12 am</span><span className="tag">open</span></div>
+          <div><span className="day">Fri — Sat</span><span className="t">4 pm — 2 am</span><span className="tag now">tonight</span></div>
+          <div><span className="day">Sunday</span><span className="t">3 pm — 10 pm</span><span className="tag">open</span></div>
+        </div>
+
+        <div className="door__actions">
+          <a href="#" className="btn btn--primary">Get Directions →</a>
+          <a href="#" className="btn btn--ghost">Reservations</a>
+        </div>
+      </div>
+
+      <div className="door__map">
+        <span className="mc tl">N 30.6744°</span>
+        <span className="mc tr">Main &amp; 26th</span>
+        <span className="mc bl">W 96.3702°</span>
+        <span className="mc br">Bryan, TX</span>
+        <svg viewBox="0 0 400 400" preserveAspectRatio="none">
+          <g stroke="rgba(238,218,176,0.08)" strokeWidth="1" fill="none">
+            <line x1="0" y1="80" x2="400" y2="80"/>
+            <line x1="0" y1="160" x2="400" y2="160"/>
+            <line x1="0" y1="240" x2="400" y2="240"/>
+            <line x1="0" y1="320" x2="400" y2="320"/>
+            <line x1="80" y1="0" x2="80" y2="400"/>
+            <line x1="160" y1="0" x2="160" y2="400"/>
+            <line x1="240" y1="0" x2="240" y2="400"/>
+            <line x1="320" y1="0" x2="320" y2="400"/>
+          </g>
+          <g stroke="rgba(212,170,78,0.55)" strokeWidth="2" fill="none">
+            <line x1="200" y1="0" x2="200" y2="400"/>
+            <line x1="0" y1="200" x2="400" y2="200"/>
+          </g>
+          <text x="210" y="20" fill="rgba(212,170,78,0.8)" fontFamily="Space Grotesk" fontSize="10" letterSpacing="1">MAIN ST</text>
+          <text x="10" y="195" fill="rgba(212,170,78,0.8)" fontFamily="Space Grotesk" fontSize="10" letterSpacing="1">26TH ST</text>
+        </svg>
+        <div className="pin">
+          <div className="n">Citrus &amp; Salt</div>
+          <div className="aq">aquí estamos</div>
+          <div className="d" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Foot() {
+  return (
+    <footer>
+      <span>&copy; 2026 Citrus &amp; Salt · 212 N Main St · Bryan, TX · 21+</span>
+      <span className="vice">
+        P.S. — We also run <b>Vice</b> two blocks up. <a href="https://vicedowntownbryan.com">vicedowntownbryan.com ↗</a>
+      </span>{' '}
+    </footer>
+  );
+}
+
+function Tweaks({ state, setState, open }) {
+  if (!open) return null;
+  return (
+    <div className="tweaks open">
+      <h4>Tweaks</h4>
+      <label>
+        <span>Palette</span>
+        <div className="row" style={{marginBottom:8}}>
+          {Object.entries(PALETTES).map(([k, v]) => (
+            <div key={k}
+              className={`sw ${state.palette === k ? 'sel' : ''}`}
+              style={{background: `linear-gradient(135deg, ${v.mustard} 0 50%, ${v.clay} 50% 100%)`}}
+              onClick={() => setState({...state, palette: k})} />
+          ))}
+        </div>
+        <select value={state.palette} onChange={e => setState({...state, palette: e.target.value})}>
+          {Object.entries(PALETTES).map(([k,v]) => <option key={k} value={k}>{v.label}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Headline</span>
+        <select value={state.headline} onChange={e => setState({...state, headline: e.target.value})}>
+          <option value="only-in-bryan">The only tequila bar in Bryan.</option>
+          <option value="zero-to-one">Zero to one. Bryan&rsquo;s first tequila bar.</option>
+          <option value="on-main">Tequila, finally on Main.</option>
+        </select>
+      </label>
+      <label>
+        <span>Neon flicker</span>
+        <select value={state.flicker ? 'on' : 'off'} onChange={e => setState({...state, flicker: e.target.value === 'on'})}>
+          <option value="on">On</option>
+          <option value="off">Off (steady glow)</option>
+        </select>
+      </label>
+    </div>
+  );
+}
+
+function Marquee() {
+  const items = [
+    { brand: 'Fortaleza',        region: 'Tequila, Jalisco',     cls: '' },
+    { brand: 'Siete Leguas',     region: 'Atotonilco',           cls: 'p' },
+    { brand: 'Del Maguey',       region: 'Oaxaca',               cls: 'c' },
+    { brand: 'Tapatío',         region: 'Arandas',              cls: 'l' },
+    { brand: 'Cláse Azul',        region: 'Los Altos',            cls: '' },
+    { brand: 'Vago',             region: 'Mezcal · Oaxaca',      cls: 'p' },
+    { brand: 'ArteNOM',          region: '— single estate',      cls: 'c' },
+    { brand: 'Mijenta',          region: 'Jalisco',              cls: '' },
+    { brand: 'Don Fulano',       region: 'Los Altos',            cls: 'l' },
+    { brand: 'Tears of Llorona', region: 'Extra Añejo',          cls: 'p' },
+    { brand: 'El Tesoro',        region: 'Arandas',              cls: '' },
+    { brand: 'Ilegal',           region: 'Mezcal',               cls: 'c' },
+    { brand: 'G4',               region: 'Los Altos',            cls: 'l' },
+    { brand: 'Casamigos',        region: 'Jalisco',              cls: '' },
+    { brand: 'Lalo',             region: 'Arandas',              cls: 'p' },
+  ];
+  const loop = [...items, ...items];
+  return (
+    <div className="marquee">
+      <span className="marquee__lbl">On the shelf — 100+ more</span>
+      <div className="marquee__clip">
+        <div className="marquee__track">
+          {loop.map((it, i) => (
+            <span key={i} className={`marquee__item ${it.cls}`}>
+              <em>{it.brand}</em>
+              <span className="r">{it.region}</span>
+              <span className="marquee__dot" aria-hidden="true" />
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Burger() {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+  const close = () => setOpen(false);
+  return (
+    <>
+      <button
+        className={`burger ${open ? 'open' : ''}`}
+        aria-label={open ? 'Close menu' : 'Open menu'}
+        onClick={() => setOpen(o => !o)}
+      >
+        <span /><span /><span />
+      </button>
+      <nav className={`menu ${open ? 'open' : ''}`} aria-hidden={!open}>
+        <a href="#carta" onClick={close}><span className="n">01</span> The List</a>
+        <a href="#letter" onClick={close}><span className="n">02</span> The Room</a>
+        <a href="#door" onClick={close}><span className="n">03</span> Find Us</a>
+        <a href="#door" onClick={close}><span className="n">04</span> Hours</a>
+        <span className="spark">— salud</span>
+        <div className="tel">
+          <span>Call the bar</span>
+          <a href="tel:+19795550137"><b>(979) 555&middot;0137</b></a>
+        </div>
+      </nav>
+    </>
+  );
+}
+
+function StickyBar() {
+  return (
+    <div className="stickybar">
+      <a className="call" href="tel:+19795550137">Call</a>
+      <a className="dir" href="https://maps.google.com/?q=212+N+Main+St+Bryan+TX" target="_blank" rel="noreferrer">Directions →</a>
+    </div>
+  );
+}
+
+function App() {
+  const [state, setState] = useState(TWEAK_DEFAULTS);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    function onMsg(e) {
+      if (e.data?.type === '__activate_edit_mode') setOpen(true);
+      if (e.data?.type === '__deactivate_edit_mode') setOpen(false);
+    }
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({type: '__edit_mode_available'}, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  useEffect(() => {
+    window.parent.postMessage({type: '__edit_mode_set_keys', edits: state}, '*');
+  }, [state]);
+
+  useEffect(() => {
+    const p = PALETTES[state.palette] || PALETTES['mustard-clay'];
+    document.documentElement.style.setProperty('--mustard', p.mustard);
+    document.documentElement.style.setProperty('--clay', p.clay);
+    document.documentElement.style.setProperty('--pink', p.pink);
+
+    const id = 'fx-fl'; let s = document.getElementById(id);
+    if (!s) { s = document.createElement('style'); s.id = id; document.head.appendChild(s); }
+    s.textContent = state.flicker ? '' : `
+      .hero__sign { animation: none !important; filter: drop-shadow(0 0 26px rgba(255,106,148,0.4)) drop-shadow(0 0 52px rgba(41,212,232,0.18)) drop-shadow(0 30px 60px rgba(0,0,0,0.7)) !important; }
+    `;
+  }, [state]);
+
+  return (
+    <>
+      <Topbar />
+      <Burger />
+      <Hero headline={state.headline} />
+      <Marquee />
+      <Carta />
+      <Letter />
+      <Door />
+      <Foot />
+      <Tweaks state={state} setState={setState} open={open} />
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
