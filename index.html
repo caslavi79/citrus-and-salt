@@ -46,7 +46,10 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: var(--night); color: var(--bone); font-family: var(--body); }
+  html { min-height: 100%; }
   body {
+    margin-top: -120px;
+    padding-top: 120px;
     background:
       linear-gradient(180deg, #3a2410 0, #2a1a0d 70px, #1d1209 140px, transparent 220px),
       radial-gradient(1200px 900px at 70% -5%, rgba(176,82,62,0.16), transparent 55%),
