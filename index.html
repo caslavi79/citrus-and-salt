@@ -363,15 +363,10 @@
     font-family: var(--script); color: var(--clay);
     opacity: 0.35;
   }
-  .scribble.s1 { top: 18%; left: 6%; font-size: 22px; transform: rotate(-18deg); color: var(--mustard); opacity: 0.5; }
   .scribble.s2 { bottom: 20%; right: 8%; font-size: 20px; transform: rotate(8deg); color: var(--pink); opacity: 0.45; }
   @media (max-width: 559px) { .scribble { display: none; } }
-  .scribble.s1 { top: 14%; left: 4%; }
   .scribble.s2 { bottom: 18%; right: 6%; }
-  /* Desktop: hero__only supertitle lives in the grid's top-left, so nudge
-     the mustard scribble up and out of its path. */
   @media (min-width: 960px) {
-    .scribble.s1 { top: 5.5%; left: 3%; font-size: 20px; transform: rotate(-12deg); }
     .scribble.s2 { bottom: 14%; right: 4%; }
   }
 
@@ -1001,7 +996,6 @@ function Hero({ headline, status, openChooser }) {
 
   return (
     <section id="top" className="hero">
-      <span className="scribble s1">· 100+ tequilas and mezcals ·</span>
       <span className="scribble s2">salud, Downtown Bryan</span>
 
       <span className="hero__only">BCS&rsquo;s new all-agave cocktail bar</span>
