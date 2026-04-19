@@ -1396,6 +1396,22 @@ function App() {
   const openChooser = (kind) => setChooserKind(kind);
   const closeChooser = () => setChooserKind(null);
 
+  // Re-scroll to URL hash once React has mounted the section targets.
+  // Otherwise landing on /#carta etc. (e.g. from faq page nav) dumps you
+  // at the top because the sections don't exist when the browser tries.
+  useEffect(() => {
+    if (!window.location.hash) return;
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const prev = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = 'auto';
+      el.scrollIntoView({ block: 'start' });
+      document.documentElement.style.scrollBehavior = prev;
+    }));
+  }, []);
+
   useEffect(() => {
     function onMsg(e) {
       if (e.data?.type === '__activate_edit_mode') setOpen(true);

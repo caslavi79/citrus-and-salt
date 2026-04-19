@@ -792,6 +792,20 @@ function App() {
   const openChooser = (kind) => setChooserKind(kind);
   const closeChooser = () => setChooserKind(null);
 
+  // Re-scroll to URL hash after React mounts the sections.
+  useEffect(() => {
+    if (!window.location.hash) return;
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const prev = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = 'auto';
+      el.scrollIntoView({ block: 'start' });
+      document.documentElement.style.scrollBehavior = prev;
+    }));
+  }, []);
+
   return (
     <>
       <Topbar />
