@@ -640,9 +640,12 @@
     font-size: 30px; line-height: 1;
     text-shadow: 0 0 18px rgba(255,106,148,0.35);
     white-space: nowrap;
+    text-decoration: underline dotted rgba(255,106,148,0.55);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.14em;
   }
   @media (min-width: 760px) { .door__phone { margin-top: 28px; font-size: 46px; } }
-  .door__phone:hover { color: var(--mustard); }
+  .door__phone:hover { color: var(--mustard); text-decoration-color: var(--mustard); }
 
   .door__hours {
     margin-top: 24px;
@@ -751,6 +754,12 @@
     padding-top: 28px;
     border-top: 1px dashed rgba(238,218,176,0.15);
   }
+  .menu .tel a {
+    text-decoration: underline dotted rgba(255,106,148,0.55);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.14em;
+  }
+  .menu .tel a:hover { text-decoration-color: var(--bone); }
   .menu .tel b {
     font-family: var(--script); color: var(--pink);
     font-size: 40px; line-height: 1; font-weight: 400;
