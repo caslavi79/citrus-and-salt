@@ -327,6 +327,24 @@
     white-space: nowrap;
   }
   @media (min-width: 760px) { .hero__note .hrs { font-size: 50px; } }
+
+  /* Short viewports (iPhone SE etc.): shrink hero chrome so the status
+     note stays above the fold without scrolling. Activates on short
+     heights OR narrow widths. */
+  @media (max-height: 740px), (max-width: 400px) {
+    .hero { padding: 5rem clamp(1rem, 4vw, 4rem) 2rem; gap: 0.875rem; }
+    .hero__sign { max-width: 78vw; margin-top: -0.5rem; }
+    .hero__lede {
+      margin-top: -2rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .hero__row { gap: 0.625rem; }
+    .hero__row .btn { min-height: 2.75rem; padding: 0.625rem 1.5rem; }
+    .hero__note .hrs { font-size: 32px; }
+    .hero__note .lbl { font-size: 13px; }
+  }
   .hero__note .dot { display:inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 12px var(--lime); margin-right: 8px; vertical-align: middle; transition: background .4s, box-shadow .4s; }
   .hero__note.is-closed .dot { background: var(--clay); box-shadow: 0 0 8px rgba(176,82,62,0.5); }
 
