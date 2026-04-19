@@ -71,29 +71,6 @@
       "worksFor": {"@id": "https://citrusandsaltbryan.com/#bar"},
       "award": ["Voted Best Bartender in Texas", "Bar Boss National Competition Finalist (2025)"],
       "description": "Marine Corps veteran and craft cocktail bar owner. Founder of Citrus & Salt, Vice Downtown Bryan, Word of Mouth Speakeasy, Concrete Rodeo, and West End Elixir Company."
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://citrusandsaltbryan.com/#faq",
-      "mainEntityOfPage": {"@id": "https://citrusandsaltbryan.com/#bar"},
-      "mainEntity": [
-        {"@type": "Question", "name": "Where is Citrus and Salt?", "acceptedAnswer": {"@type": "Answer", "text": "121 N Main St, Historic Downtown Bryan, TX 77803. Ground floor. Five miles and about ten minutes from Kyle Field and the Texas A&M campus. Free street parking on Main after 6 pm, plus a city lot one block east."}},
-        {"@type": "Question", "name": "Is Citrus and Salt the same place as Vice?", "acceptedAnswer": {"@type": "Answer", "text": "No. Vice is the hookah lounge and dance floor upstairs at 121 N Main St, open Tuesday through Saturday from 8 pm to 2 am. Citrus and Salt is the ground-floor tequila bar, open Tuesday through Sunday starting at 7 pm. Same building, same ownership, different rooms."}},
-        {"@type": "Question", "name": "Do you take reservations?", "acceptedAnswer": {"@type": "Answer", "text": "Walk-ins are welcome every night we're open. Reservations are recommended for Aggie Ring Day, graduation weekends, Family Weekend, and any home football Saturday. Call (832) 285-4598 to book."}},
-        {"@type": "Question", "name": "Can I book Citrus and Salt for a private event?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Bachelor and bachelorette parties, birthdays, Ring Day group dinners, rehearsal dinners, corporate happy hours, and full buyouts. Call (832) 285-4598 or email citrusandsalt@gmail.com."}},
-        {"@type": "Question", "name": "Are you open on Aggie home football Saturdays?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, every home game. Reservations recommended, especially for the A&M vs Texas game on Friday, November 27, 2026."}},
-        {"@type": "Question", "name": "What's the dress code?", "acceptedAnswer": {"@type": "Answer", "text": "Come as you are. It's a cocktail bar, not a nightclub. That's Vice, upstairs."}},
-        {"@type": "Question", "name": "Is there food?", "acceptedAnswer": {"@type": "Answer", "text": "We're a drinks-first bar. The Downtown Bryan restaurant scene is within two blocks in every direction."}},
-        {"@type": "Question", "name": "How loud is it?", "acceptedAnswer": {"@type": "Answer", "text": "Most nights you can talk at normal volume without leaning in. The DJs are upstairs at Vice Thursday through Saturday starting at 10 pm. Ground floor stays a cocktail bar."}},
-        {"@type": "Question", "name": "Is parking a hassle?", "acceptedAnswer": {"@type": "Answer", "text": "No. Free street parking on N Main and the surrounding blocks after 6 pm. City lot one block east. No valet."}},
-        {"@type": "Question", "name": "Do you have frozen margaritas?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Classic lime on the machine. Fresh citrus, real agave, honest pours."}},
-        {"@type": "Question", "name": "How far is Citrus and Salt from Kyle Field?", "acceptedAnswer": {"@type": "Answer", "text": "Five miles, about ten minutes by car. Because we're in Downtown Bryan and not Northgate, there's no stadium traffic to fight before or after games."}},
-        {"@type": "Question", "name": "Is there a tequila bar in College Station?", "acceptedAnswer": {"@type": "Answer", "text": "Citrus and Salt is five miles away in Downtown Bryan at 121 N Main St. It's the only all-agave cocktail bar in the Bryan and College Station area."}},
-        {"@type": "Question", "name": "What makes Citrus and Salt different from other bars downtown?", "acceptedAnswer": {"@type": "Answer", "text": "Every drink starts with tequila or mezcal. Over 100 agave spirits on the back bar, from blanco to extra añejo, from espadín to tobalá. Craft cocktails, frozen margaritas, agave flights, and the full Mexican beer wall."}},
-        {"@type": "Question", "name": "Who owns Citrus and Salt?", "acceptedAnswer": {"@type": "Answer", "text": "Dustin Batson. Marine Corps veteran. Voted Best Bartender in Texas. Same owner as Word of Mouth Speakeasy, Concrete Rodeo, West End Elixir Company, and Vice Downtown Bryan."}},
-        {"@type": "Question", "name": "What's the difference between tequila and mezcal?", "acceptedAnswer": {"@type": "Answer", "text": "Tequila can only be made from blue Weber agave, almost all of it from Jalisco. Mezcal is a broader category, made from 30-plus agave varieties across nine Mexican states, roasted in earthen pits, which is where the smoke comes from."}},
-        {"@type": "Question", "name": "What tequilas and mezcals do you carry?", "acceptedAnswer": {"@type": "Answer", "text": "Over 100, and the list rotates. Tequilas include Fortaleza, Siete Leguas, Siembra Valles, G4, Tapatío, Tequila Ocho, Don Fulano, El Tesoro, Tears of Llorona, Clase Azul, Mijenta, Lalo, and ArteNOM. Mezcals include Del Maguey, Vago, Rey Campero, Mezcal Unión, Bozal, and Ilegal."}}
-      ]
     }
   ]
 }
@@ -340,16 +317,17 @@
   }
   @media (min-width: 960px) { .hero__note { transform-origin: left center; } }
   .hero__note .lbl {
-    font-family: var(--display); font-style: italic; font-size: 13px;
+    font-family: var(--display); font-style: italic; font-size: 15px;
     color: var(--bone-dim);
   }
+  @media (min-width: 760px) { .hero__note .lbl { font-size: 16px; } }
   .hero__note .hrs {
-    font-family: var(--script); font-size: 28px; color: var(--pink);
+    font-family: var(--script); font-size: 38px; color: var(--pink);
     line-height: 1; text-shadow: 0 0 14px rgba(255,106,148,0.45);
     white-space: nowrap;
   }
-  @media (min-width: 760px) { .hero__note .hrs { font-size: 34px; } }
-  .hero__note .dot { display:inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 10px var(--lime); margin-right: 6px; vertical-align: middle; transition: background .4s, box-shadow .4s; }
+  @media (min-width: 760px) { .hero__note .hrs { font-size: 50px; } }
+  .hero__note .dot { display:inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 12px var(--lime); margin-right: 8px; vertical-align: middle; transition: background .4s, box-shadow .4s; }
   .hero__note.is-closed .dot { background: var(--clay); box-shadow: 0 0 8px rgba(176,82,62,0.5); }
 
   /* logo floats, no box around it */
@@ -867,92 +845,6 @@
   .tweaks .sw { flex:1; aspect-ratio: 1; border: 1.5px solid rgba(238,218,176,0.15); cursor: pointer; }
   .tweaks .sw.sel { border-color: var(--bone); }
 
-  /* ============================== FAQ */
-  .faq {
-    padding: clamp(3rem, 8vw, 6rem) clamp(1.25rem, 4vw, 4rem) clamp(2rem, 5vw, 4rem);
-    max-width: 980px;
-    margin: 0 auto;
-  }
-  .faq__head {
-    margin-bottom: clamp(2rem, 5vw, 3.5rem);
-    text-align: center;
-  }
-  .faq__h {
-    font-family: var(--display);
-    font-weight: 400;
-    font-size: clamp(1.75rem, 5vw, 3rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    color: var(--bone);
-    text-wrap: balance;
-  }
-  .faq__h .s {
-    display: block;
-    font-family: var(--script);
-    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-    color: var(--mustard);
-    margin-bottom: 0.25rem;
-    font-weight: 400;
-    letter-spacing: 0;
-  }
-  .faq__h .it {
-    font-style: italic;
-    color: var(--plaster);
-  }
-  .faq__item {
-    padding: clamp(1.25rem, 2.5vw, 1.75rem) 0;
-    border-bottom: 1px solid rgba(212,170,78,0.15);
-  }
-  .faq__item:last-of-type {
-    border-bottom: 0;
-  }
-  .faq__q {
-    font-family: var(--display);
-    font-weight: 500;
-    font-size: clamp(1.05rem, 2vw, 1.25rem);
-    color: var(--bone);
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.005em;
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding-right: 1.5rem;
-    position: relative;
-  }
-  .faq__q::-webkit-details-marker { display: none; }
-  .faq__q::after {
-    content: '+';
-    position: absolute;
-    right: 0;
-    font-family: var(--script);
-    font-weight: 400;
-    font-size: 1.5em;
-    color: var(--mustard);
-    transition: transform .25s ease;
-    transform-origin: center;
-    line-height: 1;
-  }
-  details[open] > .faq__q::after { content: '\2013'; }
-  .faq__q:hover { color: var(--plaster); }
-  .faq__q:hover::after { color: var(--pink); }
-  .faq__a {
-    font-family: var(--body);
-    font-weight: 400;
-    font-size: clamp(0.95rem, 1.7vw, 1.05rem);
-    line-height: 1.55;
-    color: var(--plaster);
-  }
-  .faq__a a {
-    color: var(--mustard);
-    border-bottom: 1px solid rgba(212,170,78,0.35);
-  }
-  .faq__a a:hover {
-    color: var(--bone);
-    border-bottom-color: var(--bone);
-  }
-  .faq__item > .faq__a { margin-top: 0.5rem; padding-bottom: 0.5rem; }
 </style>
 </head>
 <body>
@@ -1063,7 +955,7 @@ function Topbar() {
       <div className="links">
         <a href="#carta">Drinks</a>
         <a href="#letter">The Story</a>
-        <a href="#faq">FAQ</a>
+        <a href="faq.html">News &amp; FAQ</a>
         <a href="#door">Visit</a>
       </div>
     </nav>
@@ -1107,7 +999,6 @@ function Hero({ headline, status, openChooser }) {
       </p>
       <div className="hero__row">
         <a href="https://maps.google.com/?q=121+N+Main+St+Bryan+TX" target="_blank" rel="noreferrer" className="btn btn--primary" onClick={(e) => { e.preventDefault(); openChooser('dir'); }}>Find Us →</a>
-        <a href="tel:+18322854598" className="btn btn--ghost" onClick={(e) => { e.preventDefault(); openChooser('phone'); }}>Call the Bar</a>
         <div className={`hero__note ${status.open ? 'is-open' : 'is-closed'}`}>
           <span className="lbl"><span className="dot" aria-hidden="true" /> {status.label}</span>
           <span className="hrs">{status.hrs}</span>
@@ -1238,60 +1129,6 @@ function Letter() {
           </div>
         </div>
       </div>
-    </section>
-  );
-}
-
-function FAQ() {
-  const items = [
-    { k: 'where', q: 'Where is Citrus and Salt?',
-      a: <>121 N Main St, Historic Downtown Bryan, TX 77803. Ground floor. Five miles and about ten minutes from Kyle Field and the Texas A&amp;M campus. Free street parking on Main after 6 pm, plus a city lot one block east.</> },
-    { k: 'reservations', q: 'Do you take reservations?',
-      a: <>Walk-ins are welcome every night we&rsquo;re open. Reservations are recommended for Aggie Ring Day, graduation weekends, Family Weekend, and any home football Saturday. Call <a href="tel:+18322854598">(832) 285-4598</a> to book.</> },
-    { k: 'vice', q: 'Is Citrus and Salt the same place as Vice?',
-      a: <>No. Vice is the hookah lounge and dance floor upstairs at 121 N Main St, open Tuesday through Saturday from 8 pm to 2 am. Citrus and Salt is the ground-floor tequila bar, open Tuesday through Sunday starting at 7 pm. Same building, same ownership, different rooms.</> },
-    { k: 'private', q: 'Can I book Citrus and Salt for a private event?',
-      a: <>Yes. Bachelor and bachelorette parties, birthdays, Ring Day group dinners, rehearsal dinners, corporate happy hours, and full buyouts. Call <a href="tel:+18322854598">(832) 285-4598</a> or email <a href="mailto:citrusandsalt@gmail.com">citrusandsalt@gmail.com</a>.</> },
-    { k: 'game-day', q: 'Are you open on Aggie home game weekends?',
-      a: <>Yes. Reservations recommended on home game weekends, especially the A&amp;M vs Texas game on Friday, November 27, 2026. Call <a href="tel:+18322854598">(832) 285-4598</a>.</> },
-    { k: 'dress', q: 'What\u2019s the dress code?',
-      a: <>Come as you are. It&rsquo;s a cocktail bar, not a nightclub. That&rsquo;s Vice, upstairs.</> },
-    { k: 'food', q: 'Is there food?',
-      a: <>We&rsquo;re a drinks-first bar. The Downtown Bryan restaurant scene is within two blocks in every direction.</> },
-    { k: 'noise', q: 'How loud is it? Can we have a conversation?',
-      a: <>Most nights you can talk at normal volume without leaning in. The DJs are upstairs at Vice Thursday through Saturday starting at 10 pm.</> },
-    { k: 'parking', q: 'Is parking a hassle?',
-      a: <>No. Free street parking on N Main and the surrounding blocks after 6 pm. City lot one block east. No valet.</> },
-    { k: 'margs', q: 'Do you have frozen margaritas?',
-      a: <>Yes. Classic lime on the machine. Fresh citrus, real agave, honest pours.</> },
-    { k: 'kyle', q: 'How far is Citrus and Salt from Kyle Field?',
-      a: <>Five miles, about ten minutes by car. Because we&rsquo;re in Downtown Bryan and not Northgate, there&rsquo;s no stadium traffic to fight before or after games.</> },
-    { k: 'cstat', q: 'Is there a tequila bar in College Station?',
-      a: <>Citrus and Salt is the only all-agave cocktail bar in the Bryan and College Station area. Ten minutes from Kyle Field.</> },
-    { k: 'diff', q: 'What makes Citrus and Salt different from other bars downtown?',
-      a: <>Every drink starts with tequila or mezcal. Over 100 agave spirits on the back bar, from blanco to extra a&ntilde;ejo, from espad&iacute;n to tobal&aacute;. Craft cocktails, frozen margaritas, agave flights, and the full Mexican beer wall.</> },
-    { k: 'owner', q: 'Who owns Citrus and Salt?',
-      a: <>Dustin Batson. Marine Corps veteran. Voted Best Bartender in Texas. Same owner as Word of Mouth Speakeasy, Concrete Rodeo, West End Elixir Company, and Vice Downtown Bryan.</> },
-    { k: 'tvm', q: 'What\u2019s the difference between tequila and mezcal?',
-      a: <>Tequila can only be made from blue Weber agave, almost all of it from Jalisco. Mezcal is a broader category, made from 30-plus agave varieties (espad&iacute;n, tobal&aacute;, madrecuixe, tepeztate) across nine Mexican states. Mezcal is roasted in earthen pits, which is where the smoke comes from. Ask for a tequila and mezcal flight and we&rsquo;ll walk you through it.</> },
-    { k: 'list', q: 'What tequilas and mezcals do you carry?',
-      a: <>Over 100, and the list rotates. Tequilas include Fortaleza, Siete Leguas, Siembra Valles, G4, Tapat&iacute;o, Tequila Ocho, Don Fulano, El Tesoro, Tears of Llorona, Clase Azul, Mijenta, Lalo, ArteNOM, Don Julio, and Patr&oacute;n. Mezcals include Del Maguey, Vago, Rey Campero, Mezcal Uni&oacute;n, Bozal, and Ilegal. Ask the bar what just came in.</> },
-  ];
-
-  return (
-    <section id="faq" className="faq" aria-labelledby="faq-h">
-      <div className="faq__head">
-        <h2 className="faq__h" id="faq-h">
-          <span className="s">A few things worth knowing</span> Before you<br/>
-          <span className="it">come in</span>.
-        </h2>
-      </div>
-      {items.map((item, i) => (
-        <details className="faq__item" key={item.k} open={i < 2}>
-          <summary className="faq__q"><span>{item.q}</span></summary>
-          <div className="faq__a">{item.a}</div>
-        </details>
-      ))}
     </section>
   );
 }
@@ -1443,7 +1280,7 @@ function Burger({ openChooser }) {
       <nav id="site-menu" className={`menu ${open ? 'open' : ''}`} aria-label="Site" aria-hidden={!open} {...(open ? {} : { inert: '' })}>
         <a href="#carta" onClick={close}><span className="n">01</span> Drinks</a>
         <a href="#letter" onClick={close}><span className="n">02</span> The Story</a>
-        <a href="#faq" onClick={close}><span className="n">03</span> FAQ</a>
+        <a href="faq.html" onClick={close}><span className="n">03</span> News &amp; FAQ</a>
         <a href="#door" onClick={close}><span className="n">04</span> Visit</a>
         <span className="spark">salud</span>
         <div className="tel">
@@ -1572,7 +1409,6 @@ function App() {
         <Marquee />
         <Carta />
         <Letter />
-        <FAQ />
         <Door status={status} openChooser={openChooser} />
       </main>
       <Foot />
