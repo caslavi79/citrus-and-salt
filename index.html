@@ -368,6 +368,12 @@
   @media (max-width: 559px) { .scribble { display: none; } }
   .scribble.s1 { top: 14%; left: 4%; }
   .scribble.s2 { bottom: 18%; right: 6%; }
+  /* Desktop: hero__only supertitle lives in the grid's top-left, so nudge
+     the mustard scribble up and out of its path. */
+  @media (min-width: 960px) {
+    .scribble.s1 { top: 5.5%; left: 3%; font-size: 20px; transform: rotate(-12deg); }
+    .scribble.s2 { bottom: 14%; right: 4%; }
+  }
 
   /* =============================BRAND MARQUEE */
   .marquee {
@@ -998,7 +1004,7 @@ function Hero({ headline, status, openChooser }) {
       <span className="scribble s1">· 100+ tequilas and mezcals ·</span>
       <span className="scribble s2">salud, Downtown Bryan</span>
 
-      <span className="hero__only">BCS&rsquo;s only all-agave cocktail bar</span>
+      <span className="hero__only">BCS&rsquo;s new all-agave cocktail bar</span>
       {H}
       <div className="hero__sign">
         <img src="logo-neon.png" alt="Citrus and Salt neon sign, tequila and mezcal bar in Downtown Bryan TX" />
@@ -1117,8 +1123,8 @@ function Letter() {
         <div className="letter__card" ref={cardRef}>
           <div className="letter__mark">A note from the owners</div>
           <p>
-            Until this spring, a real tequila bar in Bryan and College Station meant driving to Austin.
-            <em> Not anymore.</em> Citrus and Salt is BCS&rsquo;s only all-agave cocktail bar,
+            Bryan and College Station didn&rsquo;t have a real tequila bar until this spring.
+            Before that, it was <em>a drive to Austin</em>. Citrus and Salt is BCS&rsquo;s only all-agave cocktail bar,
             built intentionally for the people in this town who already know what good agave tastes like.
             Every drink starts with tequila or mezcal.
           </p>
