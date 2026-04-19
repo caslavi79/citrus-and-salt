@@ -53,9 +53,7 @@
         "longitude": -96.3698
       },
       "openingHoursSpecification": [
-        {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Tuesday", "Wednesday", "Thursday"], "opens": "19:00", "closes": "00:00"},
-        {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Friday", "Saturday"], "opens": "19:00", "closes": "02:00"},
-        {"@type": "OpeningHoursSpecification", "dayOfWeek": "Sunday", "opens": "19:00", "closes": "22:00"}
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "opens": "19:00", "closes": "02:00"}
       ],
       "founder": {"@id": "https://citrusandsaltbryan.com/#dustin"},
       "areaServed": [
@@ -898,11 +896,11 @@ const PALETTES = {
 
 // Bar hours (Central Time). 0=Sun through 6=Sat. close > 1440 means crosses midnight.
 const SCHEDULE = {
-  0: { open: 19*60, close: 22*60 },   // Sun  7pm–10pm
+  0: null,                             // Sun  closed
   1: null,                             // Mon  closed
-  2: { open: 19*60, close: 24*60 },   // Tue  7pm–12am
-  3: { open: 19*60, close: 24*60 },   // Wed  7pm–12am
-  4: { open: 19*60, close: 24*60 },   // Thu  7pm–12am
+  2: { open: 19*60, close: 26*60 },   // Tue  7pm–2am
+  3: { open: 19*60, close: 26*60 },   // Wed  7pm–2am
+  4: { open: 19*60, close: 26*60 },   // Thu  7pm–2am
   5: { open: 19*60, close: 26*60 },   // Fri  7pm–2am
   6: { open: 19*60, close: 26*60 },   // Sat  7pm–2am
 };
@@ -1179,10 +1177,8 @@ function Door({ status, openChooser }) {
       <a href="tel:+18322854598" className="door__phone" onClick={(e) => { e.preventDefault(); openChooser('phone'); }}>(832) 285&middot;4598</a>
 
       <div className="door__hours">
-        <div><span className="day">Monday</span><span className="t">closed</span>{rowTag([1])}</div>
-        <div><span className="day">Tue — Thu</span><span className="t">7 pm — 12 am</span>{rowTag([2,3,4])}</div>
-        <div><span className="day">Fri — Sat</span><span className="t">7 pm — 2 am</span>{rowTag([5,6])}</div>
-        <div><span className="day">Sunday</span><span className="t">7 pm — 10 pm</span>{rowTag([0])}</div>
+        <div><span className="day">Sun — Mon</span><span className="t">closed</span>{rowTag([0,1])}</div>
+        <div><span className="day">Tue — Sat</span><span className="t">7 pm — 2 am</span>{rowTag([2,3,4,5,6])}</div>
       </div>
 
       <div className="door__actions">
