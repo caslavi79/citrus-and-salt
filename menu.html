@@ -4,24 +4,20 @@
 <meta charset="UTF-8">
 <title>Citrus & Salt — Tequila & Mezcal List</title>
 
-<!-- Google Fonts: same stack the site uses -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Yellowtail&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Yellowtail&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
-  /* ───────────────────────────────────────────────────────────
+  /* ──────────────────────────────────────────────────────────────
      EDIT GUIDE
-     Every bottle lives in a <div class="item">…</div> under its
-     section's tier (Standard / Craft / Rare). Add, remove, or
-     reorder them and re-run build_menu.py to regenerate menu.pdf.
-     Section blurbs: look for .sec-blurb.
-     Hours / phone / address: search for "hdr-info" and "ftr-".
-     ─────────────────────────────────────────────────────────── */
-
-  /* @page rules are ignored by the build pipeline (we screenshot, not
-     print-to-pdf). The page height is set by build_menu.py's WINDOW_SIZE;
-     the script auto-trims trailing whitespace. */
+     Bottles live as <li> under the right tier (Standard / Craft /
+     Rare) in each <section class="sec">. Add/remove/reorder freely,
+     then re-run build_menu.py.
+     Address / hours / phone: search "hdr-meta".
+     Section supertitles ("the blancos" etc): Yellowtail script above
+     each title, edit in the <span class="sec-super"> lines.
+     ────────────────────────────────────────────────────────────── */
 
   :root {
     --night:    #120C08;
@@ -53,485 +49,460 @@
 
   .page {
     width: 430px;
-    background: var(--night);
+    background:
+      /* warm wash behind everything, like the site's hero::before */
+      radial-gradient(520px 420px at 72% 10%, rgba(255,170,100,0.10), transparent 65%),
+      radial-gradient(460px 380px at 28% 38%, rgba(212,170,78,0.06), transparent 65%),
+      radial-gradient(480px 380px at 78% 78%, rgba(176,82,62,0.08), transparent 65%),
+      var(--night);
     position: relative;
-    padding: 42px 28px 40px 28px;
+    padding: 46px 30px 40px;
     overflow: hidden;
   }
 
-  /* Background: radial warm glows + a faint parchment grid */
-  .grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(212,170,78,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(212,170,78,0.025) 1px, transparent 1px);
-    background-size: 34px 34px;
-  }
-  .glow { position: absolute; border-radius: 50%; filter: blur(60px); }
-  .glow-1 { top:-80px; left:-40px; width:280px; height:280px; background: rgba(176,82,62,0.22); }
-  .glow-2 { top:22%; right:-50px; width:260px; height:260px; background: rgba(212,170,78,0.14); }
-  .glow-3 { top:50%; left:-40px; width:230px; height:230px; background: rgba(255,106,148,0.10); }
-  .glow-4 { top:78%; right:-30px; width:220px; height:220px; background: rgba(212,170,78,0.12); }
-
-  .z { position: relative; z-index: 2; }
-
   /* ─── HEADER ─────────────────────────────────────────── */
-  .hdr { text-align: center; padding-bottom: 28px; position: relative; margin-bottom: 34px; }
-  .hdr-line {
-    position: absolute; bottom: 0; left: 30px; right: 30px; height: 1px;
-    background: rgba(212,170,78,0.18);
+  .hdr {
+    text-align: center;
+    padding-bottom: 26px;
+    margin-bottom: 26px;
+    border-bottom: 1px dashed rgba(238,218,176,0.25);
   }
-  .hdr-line-glow {
-    position: absolute; bottom: -1.5px; left: 50%; transform: translateX(-50%);
-    width: 180px; height: 3px; background: var(--mustard); border-radius: 2px;
-    box-shadow: 0 0 8px var(--mustard), 0 0 18px var(--mustard), 0 0 38px rgba(212,170,78,0.4);
+  .hdr-super {
+    font-family: var(--script);
+    color: var(--mustard);
+    font-size: 26px;
+    line-height: 1;
+    margin-bottom: 6px;
+    transform: rotate(-2deg);
+    display: inline-block;
   }
-  .hdr-kicker {
-    font-family: var(--body);
-    font-weight: 500;
-    font-size: 10px;
-    letter-spacing: 6px; text-indent: 6px;
-    text-transform: uppercase;
-    color: var(--pink);
-    text-shadow: 0 0 8px var(--pink), 0 0 20px rgba(255,106,148,0.35);
-    margin-bottom: 14px;
-  }
-  .hdr-logo {
+  .hdr-title {
     font-family: var(--display);
     font-style: italic;
     font-weight: 400;
-    font-size: 70px;
-    color: var(--bone);
-    line-height: 0.95;
-    letter-spacing: -0.015em;
-    margin-bottom: 4px;
-  }
-  .hdr-logo .amp { color: var(--mustard); font-style: italic; }
-  .hdr-tagline {
-    font-family: var(--script);
-    font-size: 22px;
-    color: var(--mustard);
+    font-size: 62px;
     line-height: 1;
-    margin-top: 8px;
-    margin-bottom: 18px;
-    text-shadow: 0 0 10px rgba(212,170,78,0.4);
+    letter-spacing: -0.015em;
+    color: var(--bone);
+    margin-bottom: 10px;
   }
-  .hdr-info {
-    font-family: var(--body);
-    font-weight: 300;
-    font-size: 9.5px;
-    letter-spacing: 2.2px;
-    text-transform: uppercase;
-    color: rgba(238,218,176,0.5);
-    line-height: 1.85;
+  .hdr-title .amp { color: var(--mustard); }
+  .hdr-sub {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    color: var(--plaster);
+    margin-bottom: 14px;
+  }
+  .hdr-meta {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--bone-dim);
+    line-height: 1.6;
   }
 
   /* ─── SECTIONS ───────────────────────────────────────── */
-  .sec { text-align: center; }
-  .sec-bar {
-    width: 32px; height: 2.5px; margin: 0 auto 12px; border-radius: 1px;
-    background: var(--mustard);
-    box-shadow: 0 0 6px var(--mustard), 0 0 16px rgba(212,170,78,0.5);
+  .sec {
+    padding: 20px 4px 6px;
+    text-align: center;
   }
-  .sec-bar.pink {
-    background: var(--pink);
-    box-shadow: 0 0 6px var(--pink), 0 0 16px rgba(255,106,148,0.5);
-  }
-  .sec-eye {
-    font-family: var(--body);
-    font-weight: 500;
-    font-size: 8.5px;
-    letter-spacing: 4.5px; text-indent: 4.5px;
-    text-transform: uppercase;
+  .sec-super {
+    font-family: var(--script);
     color: var(--mustard);
-    text-shadow: 0 0 6px rgba(212,170,78,0.35);
-    margin-bottom: 8px;
-  }
-  .sec-eye.pink { color: var(--pink); text-shadow: 0 0 6px rgba(255,106,148,0.35); }
-  .sec-title {
-    font-family: var(--body);
-    font-weight: 700;
     font-size: 22px;
-    letter-spacing: 2px; text-indent: 2px;
-    text-transform: uppercase;
-    color: var(--bone);
-    line-height: 1.08;
-    margin-bottom: 10px;
-    text-shadow: 0 0 18px rgba(245,233,207,0.08);
+    line-height: 1;
+    margin-bottom: 2px;
+    transform: rotate(-1.5deg);
+    display: inline-block;
   }
+  .sec-title {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    color: var(--bone);
+    margin-bottom: 10px;
+  }
+  .sec-title .amp { color: var(--mustard); font-style: italic; }
+  .sec-title .it { color: var(--plaster); }
   .sec-blurb {
     font-family: var(--display);
     font-style: italic;
     font-weight: 400;
-    font-size: 11px;
+    font-size: 12.5px;
     color: var(--plaster);
-    line-height: 1.45;
-    max-width: 300px;
-    margin: 0 auto 20px;
+    line-height: 1.5;
+    max-width: 320px;
+    margin: 0 auto 18px;
   }
 
-  /* Tiers: two balanced columns of bottles */
+  /* Tiers & items */
   .tiers {
     columns: 2;
     column-gap: 22px;
     column-fill: balance;
     text-align: left;
-    padding: 0 4px;
+    padding: 0 2px;
   }
   .tier {
     break-inside: avoid-column;
     margin-bottom: 14px;
   }
-  .tier:last-child { margin-bottom: 0; }
+  .tier:last-child { margin-bottom: 4px; }
   .tier-label {
-    font-family: var(--body);
+    font-family: var(--display);
+    font-style: italic;
     font-weight: 500;
-    font-size: 8px;
-    letter-spacing: 2.5px; text-indent: 2.5px;
-    text-transform: uppercase;
+    font-size: 11.5px;
     color: var(--mustard);
-    margin-bottom: 5px;
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
   }
-  .tier-label.rare { color: var(--pink); text-shadow: 0 0 4px rgba(255,106,148,0.3); }
-  .item {
+  .tier-label.rare { color: var(--clay); }
+  .tier-label .star { color: var(--mustard); margin-right: 3px; }
+  .tier-label.rare .star { color: var(--clay); }
+  ul.items { list-style: none; }
+  ul.items li {
     font-family: var(--body);
     font-weight: 400;
-    font-size: 10px;
+    font-size: 10.5px;
     color: var(--bone);
     line-height: 1.55;
   }
-  .item.rare { color: var(--plaster); }
+  ul.items li.rare { color: var(--plaster); }
 
-  /* ─── DIVIDER ─────────────────────────────────────────── */
-  .dv {
-    height: 1px;
-    margin: 28px 22px;
-    background: linear-gradient(90deg,
-      transparent,
-      rgba(212,170,78,0.22) 18%,
-      rgba(212,170,78,0.22) 82%,
-      transparent);
-    position: relative;
-  }
-  .dv::before {
-    content: '';
-    position: absolute;
-    top: -1.5px; left: 50%; transform: translateX(-50%);
-    width: 42px; height: 3px;
-    background: var(--pink);
-    border-radius: 2px;
-    box-shadow: 0 0 6px var(--pink), 0 0 16px rgba(255,106,148,0.45);
+  /* ─── DIVIDER between sections ───────────────────────── */
+  hr.dash {
+    border: 0;
+    border-top: 1px dashed rgba(238,218,176,0.22);
+    margin: 18px 32px;
   }
 
   /* ─── FOOTER ─────────────────────────────────────────── */
   .ftr {
     text-align: center;
-    padding-top: 30px;
-    margin-top: 30px;
-    border-top: 1px solid rgba(212,170,78,0.14);
-    position: relative;
+    padding-top: 26px;
+    margin-top: 22px;
+    border-top: 1px dashed rgba(238,218,176,0.25);
   }
-  .ftr::before {
-    content: '';
-    position: absolute;
-    top: -1.5px; left: 50%; transform: translateX(-50%);
-    width: 140px; height: 3px;
-    background: var(--mustard);
-    border-radius: 2px;
-    box-shadow: 0 0 6px var(--mustard), 0 0 18px rgba(212,170,78,0.4);
-  }
-  .ftr-sub {
+  .ftr-super {
     font-family: var(--script);
-    font-size: 20px;
     color: var(--pink);
+    font-size: 28px;
     line-height: 1;
-    margin-bottom: 10px;
-    text-shadow: 0 0 10px rgba(255,106,148,0.3);
+    margin-bottom: 4px;
+    transform: rotate(-2deg);
+    display: inline-block;
   }
-  .ftr-logo {
+  .ftr-sign {
     font-family: var(--display);
     font-style: italic;
     font-weight: 400;
     font-size: 36px;
+    line-height: 1;
     color: var(--bone);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
-  .ftr-logo .amp { color: var(--mustard); }
+  .ftr-sign .amp { color: var(--mustard); }
   .ftr-note {
-    font-family: var(--body);
+    font-family: var(--display);
+    font-style: italic;
     font-weight: 400;
-    font-size: 9px;
-    letter-spacing: 2px; text-indent: 2px;
-    text-transform: uppercase;
+    font-size: 11px;
     color: var(--bone-dim);
-    line-height: 1.8;
+    line-height: 1.55;
   }
 </style>
 </head>
 <body>
 
 <div class="page">
-  <div class="grid"></div>
-  <div class="glow glow-1"></div>
-  <div class="glow glow-2"></div>
-  <div class="glow glow-3"></div>
-  <div class="glow glow-4"></div>
 
-  <div class="z">
-
-    <!-- ─── HEADER ───────────────────────────────────── -->
-    <div class="hdr">
-      <div class="hdr-kicker">Downtown Bryan</div>
-      <div class="hdr-logo">Citrus <span class="amp">&amp;</span> Salt</div>
-      <div class="hdr-tagline">tequila &amp; mezcal list</div>
-      <div class="hdr-info">
-        121 N Main St · Bryan, TX 77803<br>
-        Tue — Sat · 7 pm — 2 am · (832) 285-4598
-      </div>
-      <div class="hdr-line"></div>
-      <div class="hdr-line-glow"></div>
+  <!-- ─── HEADER ───────────────────────────────────── -->
+  <div class="hdr">
+    <div class="hdr-super">the carta</div>
+    <h1 class="hdr-title">Citrus <span class="amp">&amp;</span> Salt</h1>
+    <div class="hdr-sub">tequila &amp; mezcal · one hundred plus agave spirits</div>
+    <div class="hdr-meta">
+      121 N Main St · Historic Downtown Bryan<br>
+      Tuesday through Saturday · 7 pm to 2 am · (832) 285-4598
     </div>
-
-
-    <!-- ─── 1. BLANCO & PLATA ────────────────────────── -->
-    <div class="sec">
-      <div class="sec-bar"></div>
-      <div class="sec-eye">Unaged</div>
-      <div class="sec-title">Blanco &amp; Plata</div>
-      <div class="sec-blurb">Bright, peppery, agave-forward. The purest expression of the spirit.</div>
-      <div class="tiers">
-        <div class="tier">
-          <div class="tier-label">Standard</div>
-          <div class="item">Patrón Silver</div>
-          <div class="item">Don Julio Blanco</div>
-          <div class="item">Casamigos Blanco</div>
-          <div class="item">Herradura Silver</div>
-          <div class="item">Espolòn Blanco</div>
-          <div class="item">Milagro Silver</div>
-          <div class="item">El Jimador Blanco</div>
-          <div class="item">Cazadores Blanco</div>
-          <div class="item">Olmeca Altos Plata</div>
-          <div class="item">Hornitos Plata</div>
-          <div class="item">Sauza Silver</div>
-          <div class="item">1800 Silver</div>
-        </div>
-        <div class="tier">
-          <div class="tier-label">Craft</div>
-          <div class="item">Tequila Ocho Plata</div>
-          <div class="item">Fortaleza Blanco</div>
-          <div class="item">Siete Leguas Blanco</div>
-          <div class="item">Tapatío Blanco</div>
-          <div class="item">G4 Blanco</div>
-          <div class="item">Don Fulano Blanco</div>
-          <div class="item">Siembra Valles Blanco</div>
-          <div class="item">El Tesoro Blanco</div>
-          <div class="item">Mijenta Blanco</div>
-          <div class="item">Lalo</div>
-          <div class="item">Calle 23 Blanco</div>
-          <div class="item">ArteNOM Selección 1414</div>
-        </div>
-        <div class="tier">
-          <div class="tier-label rare">★ Rare</div>
-          <div class="item rare">Cabeza Blanco</div>
-          <div class="item rare">Casa Dragones Blanco</div>
-          <div class="item rare">Volcán de mi Tierra Blanco</div>
-          <div class="item rare">Código 1530 Blanco</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv"></div>
-
-    <!-- ─── 2. REPOSADO ──────────────────────────────── -->
-    <div class="sec">
-      <div class="sec-bar"></div>
-      <div class="sec-eye">Aged in oak</div>
-      <div class="sec-title">Reposado</div>
-      <div class="sec-blurb">Months in barrel. Softer, warmer — honey, vanilla, a little butter.</div>
-      <div class="tiers">
-        <div class="tier">
-          <div class="tier-label">Standard</div>
-          <div class="item">Patrón Reposado</div>
-          <div class="item">Don Julio Reposado</div>
-          <div class="item">Casamigos Reposado</div>
-          <div class="item">Herradura Reposado</div>
-          <div class="item">Espolòn Reposado</div>
-          <div class="item">Cazadores Reposado</div>
-          <div class="item">Olmeca Altos Reposado</div>
-          <div class="item">Hornitos Reposado</div>
-          <div class="item">1800 Reposado</div>
-          <div class="item">Gran Centenario Reposado</div>
-        </div>
-        <div class="tier">
-          <div class="tier-label">Craft</div>
-          <div class="item">Tequila Ocho Reposado</div>
-          <div class="item">Fortaleza Reposado</div>
-          <div class="item">Siete Leguas Reposado</div>
-          <div class="item">El Tesoro Reposado</div>
-          <div class="item">Siembra Valles Reposado</div>
-          <div class="item">G4 Reposado</div>
-          <div class="item">Don Fulano Reposado</div>
-          <div class="item">Casa Noble Reposado</div>
-        </div>
-        <div class="tier">
-          <div class="tier-label rare">★ Rare</div>
-          <div class="item rare">ArteNOM Selección 1146</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv"></div>
-
-    <!-- ─── 3. AÑEJO ─────────────────────────────────── -->
-    <div class="sec">
-      <div class="sec-bar"></div>
-      <div class="sec-eye">A year plus</div>
-      <div class="sec-title">Añejo</div>
-      <div class="sec-blurb">Toasted oak, dried fruit, vanilla. A slow sipper.</div>
-      <div class="tiers">
-        <div class="tier">
-          <div class="tier-label">Standard</div>
-          <div class="item">Patrón Añejo</div>
-          <div class="item">Don Julio Añejo</div>
-          <div class="item">Casamigos Añejo</div>
-          <div class="item">Herradura Añejo</div>
-          <div class="item">1800 Añejo</div>
-          <div class="item">Corralejo Añejo</div>
-        </div>
-        <div class="tier">
-          <div class="tier-label">Craft</div>
-          <div class="item">Tequila Ocho Añejo</div>
-          <div class="item">Fortaleza Añejo</div>
-          <div class="item">El Tesoro Añejo</div>
-          <div class="item">Don Fulano Añejo</div>
-          <div class="item">Casa Noble Añejo</div>
-        </div>
-        <div class="tier">
-          <div class="tier-label rare">★ Rare</div>
-          <div class="item rare">ArteNOM Selección 1124</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv"></div>
-
-    <!-- ─── 4. EXTRA AÑEJO & CRISTALINO ──────────────── -->
-    <div class="sec">
-      <div class="sec-bar"></div>
-      <div class="sec-eye">Three years or more</div>
-      <div class="sec-title">Extra Añejo &amp; Cristalino</div>
-      <div class="sec-blurb">Whiskey territory. Neat, one cube, take your time.</div>
-      <div class="tiers">
-        <div class="tier">
-          <div class="tier-label">Standard</div>
-          <div class="item">Don Julio 1942</div>
-          <div class="item">Don Julio 70 Cristalino</div>
-          <div class="item">Herradura Selección Suprema</div>
-          <div class="item">Maestro Dobel Diamante</div>
-        </div>
-        <div class="tier">
-          <div class="tier-label rare">★ Rare</div>
-          <div class="item rare">Tears of Llorona</div>
-          <div class="item rare">Gran Patrón Burdeos</div>
-          <div class="item rare">El Tesoro Paradiso</div>
-          <div class="item rare">Casa Noble Single Barrel</div>
-          <div class="item rare">Komos Añejo Cristalino</div>
-          <div class="item rare">Komos Extra Añejo</div>
-          <div class="item rare">Fortaleza Winter Blend</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv"></div>
-
-    <!-- ─── 5. CLASE AZUL ────────────────────────────── -->
-    <div class="sec">
-      <div class="sec-bar pink"></div>
-      <div class="sec-eye pink">Ceremony bottles</div>
-      <div class="sec-title">Clase Azul</div>
-      <div class="sec-blurb">The painted decanter shelf. Handle with reverence.</div>
-      <div class="tiers">
-        <div class="tier">
-          <div class="tier-label">The Line</div>
-          <div class="item">Clase Azul Plata</div>
-          <div class="item">Clase Azul Reposado</div>
-          <div class="item">Clase Azul Añejo</div>
-          <div class="item">Clase Azul Gold</div>
-          <div class="item">Clase Azul Mezcal Durango</div>
-        </div>
-        <div class="tier">
-          <div class="tier-label rare">★ Rare</div>
-          <div class="item rare">Clase Azul Ultra Extra Añejo</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv"></div>
-
-    <!-- ─── 6. MEZCAL · ESPADÍN ──────────────────────── -->
-    <div class="sec">
-      <div class="sec-bar"></div>
-      <div class="sec-eye">From Oaxaca</div>
-      <div class="sec-title">Mezcal · Espadín</div>
-      <div class="sec-blurb">The workhorse agave. Everything you call mezcal.</div>
-      <div class="tiers">
-        <div class="tier">
-          <div class="tier-label">Standard</div>
-          <div class="item">Del Maguey Vida</div>
-          <div class="item">Del Maguey San Luis Del Rio</div>
-          <div class="item">Del Maguey Chichicapa</div>
-          <div class="item">Ilegal Joven</div>
-          <div class="item">Ilegal Reposado</div>
-          <div class="item">Mezcal Unión Uno</div>
-          <div class="item">Mezcal Unión El Viejo</div>
-          <div class="item">Vago Espadín (E. Jarquín)</div>
-          <div class="item">Bozal Ensamble</div>
-          <div class="item">Montelobos Espadín</div>
-          <div class="item">Los Amantes Joven</div>
-          <div class="item">Banhez Ensamble</div>
-          <div class="item">Fidencio Clásico</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dv"></div>
-
-    <!-- ─── 7. WILD AGAVES ───────────────────────────── -->
-    <div class="sec">
-      <div class="sec-bar pink"></div>
-      <div class="sec-eye pink">Tobalá · Tepextate · Jabalí</div>
-      <div class="sec-title">Wild Agaves</div>
-      <div class="sec-blurb">Slower-growing, smaller batches. Funkier and older.</div>
-      <div class="tiers">
-        <div class="tier">
-          <div class="tier-label">Craft</div>
-          <div class="item">Vago Elote (corn-infused)</div>
-          <div class="item">Del Maguey Tobalá</div>
-          <div class="item">Del Maguey Pechuga</div>
-        </div>
-        <div class="tier">
-          <div class="tier-label rare">★ Rare</div>
-          <div class="item rare">Vago Tobalá</div>
-          <div class="item rare">Rey Campero Tobalá</div>
-          <div class="item rare">Rey Campero Tepextate</div>
-          <div class="item rare">Rey Campero Jabalí</div>
-          <div class="item rare">El Jolgorio Madrecuixe</div>
-          <div class="item rare">El Jolgorio Pechuga</div>
-          <div class="item rare">Bozal Tobasiche</div>
-          <div class="item rare">Bozal Cuishe</div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- ─── FOOTER ─────────────────────────────────────── -->
-    <div class="ftr">
-      <div class="ftr-sub">salud, Downtown Bryan</div>
-      <div class="ftr-logo">Citrus <span class="amp">&amp;</span> Salt</div>
-      <div class="ftr-note">List rotates — ask the bar what just came in</div>
-    </div>
-
   </div>
+
+
+  <!-- ─── 1. BLANCO & PLATA ────────────────────────── -->
+  <section class="sec">
+    <div class="sec-super">the blancos</div>
+    <h2 class="sec-title">Blanco <span class="amp">&amp;</span> <span class="it">Plata</span></h2>
+    <div class="sec-blurb">Unaged. Bright, peppery, agave-forward &mdash; the purest expression of the spirit.</div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-label">Standard</div>
+        <ul class="items">
+          <li>Patrón Silver</li>
+          <li>Don Julio Blanco</li>
+          <li>Casamigos Blanco</li>
+          <li>Herradura Silver</li>
+          <li>Espolòn Blanco</li>
+          <li>Milagro Silver</li>
+          <li>El Jimador Blanco</li>
+          <li>Cazadores Blanco</li>
+          <li>Olmeca Altos Plata</li>
+          <li>Hornitos Plata</li>
+          <li>Sauza Silver</li>
+          <li>1800 Silver</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-label">Craft</div>
+        <ul class="items">
+          <li>Tequila Ocho Plata</li>
+          <li>Fortaleza Blanco</li>
+          <li>Siete Leguas Blanco</li>
+          <li>Tapatío Blanco</li>
+          <li>G4 Blanco</li>
+          <li>Don Fulano Blanco</li>
+          <li>Siembra Valles Blanco</li>
+          <li>El Tesoro Blanco</li>
+          <li>Mijenta Blanco</li>
+          <li>Lalo</li>
+          <li>Calle 23 Blanco</li>
+          <li>ArteNOM Selección 1414</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-label rare"><span class="star">&#9733;</span>Rare</div>
+        <ul class="items">
+          <li class="rare">Cabeza Blanco</li>
+          <li class="rare">Casa Dragones Blanco</li>
+          <li class="rare">Volcán de mi Tierra Blanco</li>
+          <li class="rare">Código 1530 Blanco</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="dash">
+
+
+  <!-- ─── 2. REPOSADO ──────────────────────────────── -->
+  <section class="sec">
+    <div class="sec-super">aged in oak</div>
+    <h2 class="sec-title"><span class="it">Reposado</span></h2>
+    <div class="sec-blurb">Months in barrel. Softer, warmer &mdash; honey, vanilla, a little butter.</div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-label">Standard</div>
+        <ul class="items">
+          <li>Patrón Reposado</li>
+          <li>Don Julio Reposado</li>
+          <li>Casamigos Reposado</li>
+          <li>Herradura Reposado</li>
+          <li>Espolòn Reposado</li>
+          <li>Cazadores Reposado</li>
+          <li>Olmeca Altos Reposado</li>
+          <li>Hornitos Reposado</li>
+          <li>1800 Reposado</li>
+          <li>Gran Centenario Reposado</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-label">Craft</div>
+        <ul class="items">
+          <li>Tequila Ocho Reposado</li>
+          <li>Fortaleza Reposado</li>
+          <li>Siete Leguas Reposado</li>
+          <li>El Tesoro Reposado</li>
+          <li>Siembra Valles Reposado</li>
+          <li>G4 Reposado</li>
+          <li>Don Fulano Reposado</li>
+          <li>Casa Noble Reposado</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-label rare"><span class="star">&#9733;</span>Rare</div>
+        <ul class="items">
+          <li class="rare">ArteNOM Selección 1146</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="dash">
+
+
+  <!-- ─── 3. AÑEJO ─────────────────────────────────── -->
+  <section class="sec">
+    <div class="sec-super">a year plus</div>
+    <h2 class="sec-title"><span class="it">Añejo</span></h2>
+    <div class="sec-blurb">Toasted oak, dried fruit, vanilla. A slow sipper.</div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-label">Standard</div>
+        <ul class="items">
+          <li>Patrón Añejo</li>
+          <li>Don Julio Añejo</li>
+          <li>Casamigos Añejo</li>
+          <li>Herradura Añejo</li>
+          <li>1800 Añejo</li>
+          <li>Corralejo Añejo</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-label">Craft</div>
+        <ul class="items">
+          <li>Tequila Ocho Añejo</li>
+          <li>Fortaleza Añejo</li>
+          <li>El Tesoro Añejo</li>
+          <li>Don Fulano Añejo</li>
+          <li>Casa Noble Añejo</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-label rare"><span class="star">&#9733;</span>Rare</div>
+        <ul class="items">
+          <li class="rare">ArteNOM Selección 1124</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="dash">
+
+
+  <!-- ─── 4. EXTRA AÑEJO & CRISTALINO ──────────────── -->
+  <section class="sec">
+    <div class="sec-super">three years or more</div>
+    <h2 class="sec-title">Extra Añejo <span class="amp">&amp;</span> <span class="it">Cristalino</span></h2>
+    <div class="sec-blurb">Whiskey territory. Neat, one cube, take your time.</div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-label">Standard</div>
+        <ul class="items">
+          <li>Don Julio 1942</li>
+          <li>Don Julio 70 Cristalino</li>
+          <li>Herradura Selección Suprema</li>
+          <li>Maestro Dobel Diamante</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-label rare"><span class="star">&#9733;</span>Rare</div>
+        <ul class="items">
+          <li class="rare">Tears of Llorona</li>
+          <li class="rare">Gran Patrón Burdeos</li>
+          <li class="rare">El Tesoro Paradiso</li>
+          <li class="rare">Casa Noble Single Barrel</li>
+          <li class="rare">Komos Añejo Cristalino</li>
+          <li class="rare">Komos Extra Añejo</li>
+          <li class="rare">Fortaleza Winter Blend</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="dash">
+
+
+  <!-- ─── 5. CLASE AZUL ────────────────────────────── -->
+  <section class="sec">
+    <div class="sec-super">ceremony bottles</div>
+    <h2 class="sec-title"><span class="it">Clase Azul</span></h2>
+    <div class="sec-blurb">The painted decanter shelf. Handle with reverence.</div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-label">The Line</div>
+        <ul class="items">
+          <li>Clase Azul Plata</li>
+          <li>Clase Azul Reposado</li>
+          <li>Clase Azul Añejo</li>
+          <li>Clase Azul Gold</li>
+          <li>Clase Azul Mezcal Durango</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-label rare"><span class="star">&#9733;</span>Rare</div>
+        <ul class="items">
+          <li class="rare">Clase Azul Ultra Extra Añejo</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="dash">
+
+
+  <!-- ─── 6. MEZCAL · ESPADÍN ──────────────────────── -->
+  <section class="sec">
+    <div class="sec-super">from Oaxaca</div>
+    <h2 class="sec-title">Mezcal, <span class="it">Espadín</span></h2>
+    <div class="sec-blurb">The workhorse agave &mdash; everything most people call mezcal.</div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-label">Standard</div>
+        <ul class="items">
+          <li>Del Maguey Vida</li>
+          <li>Del Maguey San Luis Del Rio</li>
+          <li>Del Maguey Chichicapa</li>
+          <li>Ilegal Joven</li>
+          <li>Ilegal Reposado</li>
+          <li>Mezcal Unión Uno</li>
+          <li>Mezcal Unión El Viejo</li>
+          <li>Vago Espadín (E. Jarquín)</li>
+          <li>Bozal Ensamble</li>
+          <li>Montelobos Espadín</li>
+          <li>Los Amantes Joven</li>
+          <li>Banhez Ensamble</li>
+          <li>Fidencio Clásico</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="dash">
+
+
+  <!-- ─── 7. WILD AGAVES ───────────────────────────── -->
+  <section class="sec">
+    <div class="sec-super">tobalá, tepextate, jabalí</div>
+    <h2 class="sec-title"><span class="it">Wild Agaves</span></h2>
+    <div class="sec-blurb">Slower-growing, smaller batches. Funkier and older.</div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-label">Craft</div>
+        <ul class="items">
+          <li>Vago Elote (corn-infused)</li>
+          <li>Del Maguey Tobalá</li>
+          <li>Del Maguey Pechuga</li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-label rare"><span class="star">&#9733;</span>Rare</div>
+        <ul class="items">
+          <li class="rare">Vago Tobalá</li>
+          <li class="rare">Rey Campero Tobalá</li>
+          <li class="rare">Rey Campero Tepextate</li>
+          <li class="rare">Rey Campero Jabalí</li>
+          <li class="rare">El Jolgorio Madrecuixe</li>
+          <li class="rare">El Jolgorio Pechuga</li>
+          <li class="rare">Bozal Tobasiche</li>
+          <li class="rare">Bozal Cuishe</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ─── FOOTER ─────────────────────────────────────── -->
+  <div class="ftr">
+    <div class="ftr-super">salud</div>
+    <div class="ftr-sign">Citrus <span class="amp">&amp;</span> Salt</div>
+    <div class="ftr-note">The list rotates. Walk in and ask the bar what just came in.</div>
+  </div>
+
 </div>
 
 </body>
