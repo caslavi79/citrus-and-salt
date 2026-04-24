@@ -1,3 +1,7 @@
 .DS_Store
 node_modules/
 *.log
+
+# build_menu.py intermediates
+_build_menu_tmp.*
+_dbg.png
