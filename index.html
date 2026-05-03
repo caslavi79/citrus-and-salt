@@ -1035,21 +1035,15 @@ function Hero({ headline, status, openChooser }) {
 
 function Carta() {
   const drinks = [
-    { name: 'Diablo del Playa',             color: 'p', price: '$14',
+    { name: 'Diablo del Playa',             color: 'p',
       desc: 'Reposado-forward, habanero on the finish. Slow heat, long goodbye.',
       ing:  'Reposado · orange curaçao · habanero syrup · pineapple · lime' },
-    { name: 'The Slow Burn',                color: 'c', price: '$13',
+    { name: 'The Slow Burn',                color: 'c',
       desc: 'Blanco tequila, cucumber, jalapeño. Cool on the front, warm on the back.',
       ing:  'Blanco · triple sec · cucumber & jalapeño syrup · lime' },
-    { name: 'Soot, Spice & Everything Nice', color: 'k', price: '$15',
+    { name: 'Soot, Spice & Everything Nice', color: 'k',
       desc: 'Oaxacan mezcal, cinnamon, orange. Smoke and warmth in a rocks glass.',
-      ing:  'Mezcal · orange curaçao · cinnamon syrup · fresh orange' },
-    { name: 'La Casa',                      color: 'm', price: '$12',
-      desc: 'The Citrus and Salt house margarita. Blanco, fresh lime, salt rim. The one we stand behind.',
-      ing:  'Blanco · fresh lime · orange liqueur · salt rim' },
-    { name: 'Oaxaca Viejo',                 color: 'l', price: '$16',
-      desc: 'An Oaxacan Old Fashioned. Mezcal and reposado, agave, chocolate bitters. Worth a second pour.',
-      ing:  'Mezcal · reposado · agave · chocolate bitters · orange oil' },
+      ing:  'Mezcal · orange curaçao · cinnamon syrup · orange juice' },
   ];
 
   return (
@@ -1062,7 +1056,7 @@ function Carta() {
         <div className="carta__meta">
           <span>behind them:</span>
           <b>100+ tequilas &amp; mezcals</b>
-          <span>from Jalisco, Los Altos, and Oaxaca. Cocktails $12 to $16. Full Mexican beer wall.</span>
+          <span>from Jalisco, Los Altos, and Oaxaca. Full Mexican beer wall.</span>
         </div>
       </div>
 
@@ -1075,13 +1069,8 @@ function Carta() {
               <span className="ing">{d.ing}</span>
             </div>
           </div>
-          <div className="drink__price">{d.price}</div>
         </div>
       ))}
-
-      <a href="menu.pdf" target="_blank" rel="noreferrer" className="carta__full">
-        See the full tequila and mezcal list <span aria-hidden="true">→</span>
-      </a>
     </section>
   );
 }
