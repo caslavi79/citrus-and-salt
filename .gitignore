@@ -5,3 +5,7 @@ node_modules/
 # build_menu.py intermediates
 _build_menu_tmp.*
 _dbg.png
+
+# Built menu artifacts (no longer linked from site)
+menu.html
+menu.pdf
