@@ -11,6 +11,16 @@
 <meta name="robots" content="index,follow">
 
 <link rel="canonical" href="https://citrusandsaltbryan.com/faq/">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<!-- Inline scrollRestoration: prevents Safari snap-back-on-reload. Must run before React mounts. -->
+<script>(function(){try{var n=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];if(n&&n.type==='reload'){if('scrollRestoration'in history)history.scrollRestoration='manual';window.scrollTo(0,0);}}catch(e){}})();</script>
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
 
 <meta property="og:title" content="News &amp; FAQ | Citrus &amp; Salt">
@@ -51,6 +61,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Yellowtail&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- Google Analytics 4 — replace G-XXXXXXXXXX with the real measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
 
 <script defer src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
 <script defer src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
